@@ -14,8 +14,11 @@ export default function Home() {
               <h1 className="text-xl font-bold text-gray-800">Health Support System</h1>
             </div>
             <div>
-              <Link href="/admin/login" className="text-gray-600 hover:text-gray-900">
-                Go to Admin Page
+              <Link 
+                href="/auth/admin/login" 
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              >
+                Admin Login
               </Link>
             </div>
           </div>
