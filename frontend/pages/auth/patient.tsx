@@ -10,7 +10,7 @@ export default function PatientLogin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement actual authentication
-    router.push('/dashboard/patient');
+    router.push('/patient/dashboard');
   };
 
   return (
