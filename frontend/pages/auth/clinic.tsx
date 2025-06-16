@@ -10,7 +10,7 @@ export default function ClinicLogin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement actual authentication
-    router.push('/dashboard/clinic');
+    router.push('/clinic/dashboard');
   };
 
   return (
