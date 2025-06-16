@@ -15,7 +15,7 @@ export default function Home() {
             </div>
             <div>
               <Link href="/admin/login" className="text-gray-600 hover:text-gray-900">
-                Admin Login
+                Go to Admin Page
               </Link>
             </div>
           </div>
@@ -64,13 +64,13 @@ export default function Home() {
               onClick={() => router.push('/auth/clinic')}
               className="bg-green-600 text-white py-3 px-8 rounded-lg hover:bg-green-700"
             >
-              Clinic Login
+              For Clinic 
             </button>
             <button
               onClick={() => router.push('/auth/patient')}
               className="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700"
             >
-              Patient Login
+              For Patient 
             </button>
           </div>
         </div>
