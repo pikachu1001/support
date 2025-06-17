@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAuth } from '../../../contexts/AuthContext';
+import { FirebaseError } from 'firebase/app';
 
 interface FormErrors {
   email?: string;
@@ -18,6 +20,7 @@ export default function PatientRegister() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -110,14 +113,53 @@ export default function PatientRegister() {
 
     setIsLoading(true);
     try {
-      // TODO: Implement actual registration
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
-      router.push('/auth/patient');
-    } catch (error) {
-      setErrors(prev => ({
-        ...prev,
-        submit: 'Registration failed. Please try again.'
-      }));
+      // Create user account with Firebase
+      await signUp(formData.email, formData.password);
+      
+      // TODO: Store additional user data in your database
+      // You can use the user's UID from Firebase to store additional data
+      
+      router.push('/patient/dashboard');
+    } catch (err) {
+      console.error('Registration error:', err);
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            setErrors(prev => ({
+              ...prev,
+              email: 'An account with this email already exists.'
+            }));
+            break;
+          case 'auth/invalid-email':
+            setErrors(prev => ({
+              ...prev,
+              email: 'Invalid email address.'
+            }));
+            break;
+          case 'auth/operation-not-allowed':
+            setErrors(prev => ({
+              ...prev,
+              submit: 'Email/password accounts are not enabled. Please contact support.'
+            }));
+            break;
+          case 'auth/weak-password':
+            setErrors(prev => ({
+              ...prev,
+              password: 'Password is too weak. Please use a stronger password.'
+            }));
+            break;
+          default:
+            setErrors(prev => ({
+              ...prev,
+              submit: 'Failed to create account. Please try again.'
+            }));
+        }
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          submit: 'An unexpected error occurred. Please try again.'
+        }));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -131,7 +173,7 @@ export default function PatientRegister() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/auth/patient" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link href="/auth/patient/login" className="font-medium text-blue-600 hover:text-blue-500">
             Sign in
           </Link>
         </p>
@@ -215,6 +257,50 @@ export default function PatientRegister() {
             </div>
 
             <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.password ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                />
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                />
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
                 Phone number
               </label>
@@ -281,68 +367,12 @@ export default function PatientRegister() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
-                {isLoading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Registering...
-                  </>
-                ) : (
-                  'Register'
-                )}
+                {isLoading ? 'Creating account...' : 'Create account'}
               </button>
             </div>
           </form>

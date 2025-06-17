@@ -15,7 +15,7 @@ export default function Home() {
             </div>
             <div>
               <Link 
-                href="/auth/admin" 
+                href="/auth/admin/login" 
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               >
                 Admin Login
@@ -49,7 +49,7 @@ export default function Home() {
                    '¥5,000/month'}
                 </p>
                 <button
-                  onClick={() => router.push('/auth/patient')}
+                  onClick={() => router.push('/auth/patient/login')}
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
                 >
                   Select Plan
@@ -64,13 +64,13 @@ export default function Home() {
           <h3 className="text-2xl font-bold mb-8">Are you a clinic or patient?</h3>
           <div className="flex justify-center space-x-4">
             <button
-              onClick={() => router.push('/auth/clinic')}
+              onClick={() => router.push('/auth/clinic/login')}
               className="bg-green-600 text-white py-3 px-8 rounded-lg hover:bg-green-700"
             >
               For Clinic 
             </button>
             <button
-              onClick={() => router.push('/auth/patient')}
+              onClick={() => router.push('/auth/patient/login')}
               className="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700"
             >
               For Patient 

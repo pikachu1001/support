@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAuth } from '../../../contexts/AuthContext';
+import { FirebaseError } from 'firebase/app';
 
 interface FormErrors {
   email?: string;
@@ -9,10 +11,7 @@ interface FormErrors {
   clinicName?: string;
   phoneNumber?: string;
   address?: string;
-  businessLicense?: string;
-  taxId?: string;
-  contactPerson?: string;
-  contactPhone?: string;
+  licenseNumber?: string;
   submit?: string;
 }
 
@@ -20,6 +19,7 @@ export default function ClinicRegister() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,10 +27,7 @@ export default function ClinicRegister() {
     clinicName: '',
     phoneNumber: '',
     address: '',
-    businessLicense: '',
-    taxId: '',
-    contactPerson: '',
-    contactPhone: '',
+    licenseNumber: '',
   });
 
   const validateForm = (): boolean => {
@@ -72,26 +69,9 @@ export default function ClinicRegister() {
       newErrors.address = 'Address is required';
     }
 
-    // Business license validation
-    if (!formData.businessLicense) {
-      newErrors.businessLicense = 'Business license number is required';
-    }
-
-    // Tax ID validation
-    if (!formData.taxId) {
-      newErrors.taxId = 'Tax ID is required';
-    }
-
-    // Contact person validation
-    if (!formData.contactPerson) {
-      newErrors.contactPerson = 'Contact person name is required';
-    }
-
-    // Contact phone validation
-    if (!formData.contactPhone) {
-      newErrors.contactPhone = 'Contact phone number is required';
-    } else if (!/^\+?[\d\s-]{10,}$/.test(formData.contactPhone)) {
-      newErrors.contactPhone = 'Please enter a valid phone number';
+    // License number validation
+    if (!formData.licenseNumber) {
+      newErrors.licenseNumber = 'License number is required';
     }
 
     setErrors(newErrors);
@@ -121,14 +101,53 @@ export default function ClinicRegister() {
 
     setIsLoading(true);
     try {
-      // TODO: Implement actual registration
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
-      router.push('/auth/clinic');
-    } catch (error) {
-      setErrors(prev => ({
-        ...prev,
-        submit: 'Registration failed. Please try again.'
-      }));
+      // Create user account with Firebase
+      await signUp(formData.email, formData.password);
+      
+      // TODO: Store additional clinic data in your database
+      // You can use the user's UID from Firebase to store additional data
+      
+      router.push('/clinic/dashboard');
+    } catch (err) {
+      console.error('Registration error:', err);
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            setErrors(prev => ({
+              ...prev,
+              email: 'An account with this email already exists.'
+            }));
+            break;
+          case 'auth/invalid-email':
+            setErrors(prev => ({
+              ...prev,
+              email: 'Invalid email address.'
+            }));
+            break;
+          case 'auth/operation-not-allowed':
+            setErrors(prev => ({
+              ...prev,
+              submit: 'Email/password accounts are not enabled. Please contact support.'
+            }));
+            break;
+          case 'auth/weak-password':
+            setErrors(prev => ({
+              ...prev,
+              password: 'Password is too weak. Please use a stronger password.'
+            }));
+            break;
+          default:
+            setErrors(prev => ({
+              ...prev,
+              submit: 'Failed to create account. Please try again.'
+            }));
+        }
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          submit: 'An unexpected error occurred. Please try again.'
+        }));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -142,7 +161,7 @@ export default function ClinicRegister() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/auth/clinic" className="font-medium text-green-600 hover:text-green-500">
+          <Link href="/auth/clinic/login" className="font-medium text-blue-600 hover:text-blue-500">
             Sign in
           </Link>
         </p>
@@ -170,7 +189,7 @@ export default function ClinicRegister() {
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.clinicName ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.clinicName && (
                   <p className="mt-1 text-sm text-red-600">{errors.clinicName}</p>
@@ -193,142 +212,10 @@ export default function ClinicRegister() {
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.email ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                Clinic Phone Number
-              </label>
-              <div className="mt-1">
-                <input
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  type="tel"
-                  required
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.phoneNumber ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
-                />
-                {errors.phoneNumber && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                Clinic Address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="address"
-                  name="address"
-                  type="text"
-                  required
-                  value={formData.address}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.address ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
-                />
-                {errors.address && (
-                  <p className="mt-1 text-sm text-red-600">{errors.address}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="businessLicense" className="block text-sm font-medium text-gray-700">
-                Business License Number
-              </label>
-              <div className="mt-1">
-                <input
-                  id="businessLicense"
-                  name="businessLicense"
-                  type="text"
-                  required
-                  value={formData.businessLicense}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.businessLicense ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
-                />
-                {errors.businessLicense && (
-                  <p className="mt-1 text-sm text-red-600">{errors.businessLicense}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="taxId" className="block text-sm font-medium text-gray-700">
-                Tax ID
-              </label>
-              <div className="mt-1">
-                <input
-                  id="taxId"
-                  name="taxId"
-                  type="text"
-                  required
-                  value={formData.taxId}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.taxId ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
-                />
-                {errors.taxId && (
-                  <p className="mt-1 text-sm text-red-600">{errors.taxId}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="contactPerson" className="block text-sm font-medium text-gray-700">
-                Contact Person Name
-              </label>
-              <div className="mt-1">
-                <input
-                  id="contactPerson"
-                  name="contactPerson"
-                  type="text"
-                  required
-                  value={formData.contactPerson}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.contactPerson ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
-                />
-                {errors.contactPerson && (
-                  <p className="mt-1 text-sm text-red-600">{errors.contactPerson}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="contactPhone" className="block text-sm font-medium text-gray-700">
-                Contact Person Phone
-              </label>
-              <div className="mt-1">
-                <input
-                  id="contactPhone"
-                  name="contactPhone"
-                  type="tel"
-                  required
-                  value={formData.contactPhone}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.contactPhone ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
-                />
-                {errors.contactPhone && (
-                  <p className="mt-1 text-sm text-red-600">{errors.contactPhone}</p>
                 )}
               </div>
             </div>
@@ -347,7 +234,7 @@ export default function ClinicRegister() {
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.password ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">{errors.password}</p>
@@ -357,7 +244,7 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm password
+                Confirm Password
               </label>
               <div className="mt-1">
                 <input
@@ -369,7 +256,7 @@ export default function ClinicRegister() {
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500`}
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.confirmPassword && (
                   <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
@@ -378,24 +265,78 @@ export default function ClinicRegister() {
             </div>
 
             <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                Phone number
+              </label>
+              <div className="mt-1">
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  required
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.phoneNumber ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                />
+                {errors.phoneNumber && (
+                  <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="address"
+                  name="address"
+                  type="text"
+                  required
+                  value={formData.address}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.address ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                />
+                {errors.address && (
+                  <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="licenseNumber" className="block text-sm font-medium text-gray-700">
+                License Number
+              </label>
+              <div className="mt-1">
+                <input
+                  id="licenseNumber"
+                  name="licenseNumber"
+                  type="text"
+                  required
+                  value={formData.licenseNumber}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.licenseNumber ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                />
+                {errors.licenseNumber && (
+                  <p className="mt-1 text-sm text-red-600">{errors.licenseNumber}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${
-                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
-                {isLoading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Registering...
-                  </>
-                ) : (
-                  'Register Clinic'
-                )}
+                {isLoading ? 'Creating account...' : 'Create account'}
               </button>
             </div>
           </form>
