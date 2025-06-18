@@ -10,7 +10,36 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// Only initialize Firebase on the client side
+let app;
+let auth;
+
+if (typeof window !== 'undefined') {
+  // Client-side only
+  try {
+    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+  } catch (error) {
+    console.error('Failed to initialize Firebase:', error);
+    // Create a fallback auth object
+    auth = {
+      currentUser: null,
+      onAuthStateChanged: () => () => {},
+      signInWithEmailAndPassword: () => Promise.reject(new Error('Firebase initialization failed')),
+      createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase initialization failed')),
+      signOut: () => Promise.reject(new Error('Firebase initialization failed')),
+    } as any;
+  }
+} else {
+  // Server-side: create a mock auth object
+  auth = {
+    currentUser: null,
+    onAuthStateChanged: () => () => {},
+    signInWithEmailAndPassword: () => Promise.reject(new Error('Auth not available on server')),
+    createUserWithEmailAndPassword: () => Promise.reject(new Error('Auth not available on server')),
+    signOut: () => Promise.reject(new Error('Auth not available on server')),
+  } as any;
+}
+
+export { auth };
 export default app; 
