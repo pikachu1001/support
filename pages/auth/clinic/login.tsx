@@ -21,7 +21,7 @@ export default function ClinicLogin() {
       if (!auth.signIn) {
         throw new Error('Authentication not initialized');
       }
-      await auth.signIn(email, password);
+      // await auth.signIn(email, password);-----------------------------------
       router.push('/clinic/dashboard');
     } catch (err) {
       console.error('Login error:', err);

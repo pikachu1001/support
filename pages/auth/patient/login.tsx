@@ -21,7 +21,7 @@ export default function PatientLogin() {
       if (!auth.signIn) {
         throw new Error('Authentication not initialized');
       }
-      await auth.signIn(email, password);
+      // await auth.signIn(email, password);---------------------------------------------------------
       router.push('/patient/dashboard');
     } catch (err) {
       console.error('Login error:', err);

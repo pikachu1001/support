@@ -114,7 +114,7 @@ export default function PatientRegister() {
     setIsLoading(true);
     try {
       // Create user account with Firebase
-      await signUp(formData.email, formData.password);
+      // await signUp(formData.email, formData.password);----------------------------------
       
       // TODO: Store additional user data in your database
       // You can use the user's UID from Firebase to store additional data
