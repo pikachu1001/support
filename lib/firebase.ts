@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,7 +12,7 @@ const firebaseConfig = {
 
 // Only initialize Firebase on the client side
 let app;
-let auth;
+let auth: Auth | null = null;
 
 if (typeof window !== 'undefined') {
   // Client-side only
@@ -21,25 +21,10 @@ if (typeof window !== 'undefined') {
     auth = getAuth(app);
   } catch (error) {
     console.error('Failed to initialize Firebase:', error);
-    // Create a fallback auth object
-    auth = {
-      currentUser: null,
-      onAuthStateChanged: () => () => {},
-      signInWithEmailAndPassword: () => Promise.reject(new Error('Firebase initialization failed')),
-      createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase initialization failed')),
-      signOut: () => Promise.reject(new Error('Firebase initialization failed')),
-    } as any;
+    auth = null;
   }
-} else {
-  // Server-side: create a mock auth object
-  auth = {
-    currentUser: null,
-    onAuthStateChanged: () => () => {},
-    signInWithEmailAndPassword: () => Promise.reject(new Error('Auth not available on server')),
-    createUserWithEmailAndPassword: () => Promise.reject(new Error('Auth not available on server')),
-    signOut: () => Promise.reject(new Error('Auth not available on server')),
-  } as any;
 }
 
+// Export auth with proper typing
 export { auth };
 export default app; 
