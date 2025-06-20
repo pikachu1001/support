@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -8,10 +9,11 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, userType }: DashboardLayoutProps) {
+  const { logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
-    // TODO: Implement actual logout
+  const handleLogout = async () => {
+    await logout();
     router.push('/');
   };
 

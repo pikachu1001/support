@@ -21,7 +21,24 @@ export default function ClinicLogin() {
       if (!auth.signIn) {
         throw new Error('Authentication not initialized');
       }
-      // await auth.signIn(email, password);
+      await auth.signIn(email, password);
+
+      // Fetch user data from Firestore
+      const { getFirestore, doc, getDoc } = await import('firebase/firestore');
+      const db = getFirestore();
+      const user = auth.user || (await import('firebase/auth')).getAuth().currentUser;
+      if (!user) throw new Error('User not found after sign in');
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (!userDoc.exists()) throw new Error('User data not found');
+      const userData = userDoc.data();
+      if (userData.role !== 'clinic') {
+        const { signOut } = await import('firebase/auth');
+        const { auth } = await import('../../../lib/firebase');
+        await signOut(auth!);
+        setError('クリニックアカウントでログインしてください。');
+        setIsLoading(false);
+        return;
+      }
       router.push('/clinic/dashboard');
     } catch (err) {
       console.error('Login error:', err);
