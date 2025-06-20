@@ -10,7 +10,7 @@ interface SidebarItem {
 
 const sidebarItems: SidebarItem[] = [
   {
-    name: 'Dashboard',
+    name: 'ダッシュボード',
     href: '/patient/dashboard',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -19,7 +19,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Profile',
+    name: 'プロフィール',
     href: '/patient/profile',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,7 +28,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Subscription',
+    name: 'サブスクリプション',
     href: '/patient/subscription',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -37,7 +37,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Health Records',
+    name: '健康記録',
     href: '/patient/health-records',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,7 +46,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Appointments',
+    name: '予約',
     href: '/patient/appointments',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,7 +55,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Messages',
+    name: 'メッセージ',
     href: '/patient/messages',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,7 +64,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Health Tracking',
+    name: '健康管理',
     href: '/patient/health-tracking',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,7 +73,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Documents',
+    name: '書類',
     href: '/patient/documents',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,7 +82,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Support',
+    name: 'サポート',
     href: '/patient/support',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -91,7 +91,7 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    name: 'Settings',
+    name: '設定',
     href: '/patient/settings',
     icon: (props) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -126,14 +126,14 @@ export default function PatientDashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Patient Dashboard</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">患者ダッシュボード</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={handleLogout}
                 className="text-gray-600 hover:text-gray-900"
               >
-                Logout
+                ログアウト
               </button>
             </div>
           </div>
@@ -186,7 +186,7 @@ export default function PatientDashboard() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Upcoming Appointments
+                          今後の予約
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
                           0
@@ -209,7 +209,7 @@ export default function PatientDashboard() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Unread Messages
+                          未読メッセージ
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
                           0
@@ -232,7 +232,7 @@ export default function PatientDashboard() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Health Records
+                          健康記録
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
                           0
@@ -255,10 +255,10 @@ export default function PatientDashboard() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Subscription Status
+                          サブスクリプション状況
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
-                          Active
+                          有効
                         </dd>
                       </dl>
                     </div>
@@ -272,13 +272,13 @@ export default function PatientDashboard() {
               <div className="bg-white shadow rounded-lg">
                 <div className="px-4 py-5 sm:px-6">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Recent Activity
+                    最近のアクティビティ
                   </h3>
                 </div>
                 <div className="border-t border-gray-200">
                   <div className="px-4 py-5 sm:p-6">
                     <p className="text-gray-500 text-center">
-                      No recent activity to display
+                      最近のアクティビティはありません
                     </p>
                   </div>
                 </div>
@@ -290,13 +290,13 @@ export default function PatientDashboard() {
               <div className="bg-white shadow rounded-lg">
                 <div className="px-4 py-5 sm:px-6">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Health Tips
+                    健康アドバイス
                   </h3>
                 </div>
                 <div className="border-t border-gray-200">
                   <div className="px-4 py-5 sm:p-6">
                     <p className="text-gray-500 text-center">
-                      Personalized health tips will appear here
+                      パーソナライズされた健康アドバイスがここに表示されます
                     </p>
                   </div>
                 </div>

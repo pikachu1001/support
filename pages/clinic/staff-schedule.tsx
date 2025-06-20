@@ -136,7 +136,7 @@ export default function StaffSchedule() {
         <div className="mb-6 flex space-x-4">
           <div className="flex-1">
             <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-              Select Date
+              日付を選択
             </label>
             <input
               type="date"
@@ -149,7 +149,7 @@ export default function StaffSchedule() {
           </div>
           <div className="flex-1">
             <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-              Filter by Role
+              役割で絞り込み
             </label>
             <select
               id="role"
@@ -172,12 +172,12 @@ export default function StaffSchedule() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Staff Member</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role & Specialties</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Appointments</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">スタッフ名</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">役割・専門</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">スケジュール</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">予約</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ステータス</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -194,8 +194,8 @@ export default function StaffSchedule() {
                       {daySchedule?.status === 'scheduled' 
                         ? `${daySchedule.startTime} - ${daySchedule.endTime}`
                         : daySchedule?.status === 'on-leave' 
-                          ? 'On Leave'
-                          : 'Off'
+                          ? '休暇中'
+                          : '休み'
                       }
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
@@ -222,13 +222,13 @@ export default function StaffSchedule() {
                         onClick={() => {/* TODO: Implement edit schedule */}}
                         className="text-blue-600 hover:text-blue-900 mr-4"
                       >
-                        Edit
+                        編集
                       </button>
                       <button
                         onClick={() => {/* TODO: Implement view full schedule */}}
                         className="text-green-600 hover:text-green-900"
                       >
-                        View Full Schedule
+                        全スケジュールを見る
                       </button>
                     </td>
                   </tr>

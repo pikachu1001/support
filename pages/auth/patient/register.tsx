@@ -37,52 +37,52 @@ export default function PatientRegister() {
     
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'メールアドレスは必須です';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = '有効なメールアドレスを入力してください';
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'パスワードは必須です';
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters long';
+      newErrors.password = 'パスワードは8文字以上で入力してください';
     }
 
     // Confirm password validation
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'パスワードが一致しません';
     }
 
     // Name validation
     if (!formData.firstName) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = '名は必須です';
     }
     if (!formData.lastName) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = '姓は必須です';
     }
 
     // Phone validation
     if (!formData.phoneNumber) {
-      newErrors.phoneNumber = 'Phone number is required';
+      newErrors.phoneNumber = '電話番号は必須です';
     } else if (!/^\+?[\d\s-]{10,}$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
+      newErrors.phoneNumber = '有効な電話番号を入力してください';
     }
 
     // Address validation
     if (!formData.address) {
-      newErrors.address = 'Address is required';
+      newErrors.address = '住所は必須です';
     }
 
     // Date of birth validation
     if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth = 'Date of birth is required';
+      newErrors.dateOfBirth = '生年月日は必須です';
     } else {
       const dob = new Date(formData.dateOfBirth);
       const today = new Date();
       const age = today.getFullYear() - dob.getFullYear();
       if (age < 18) {
-        newErrors.dateOfBirth = 'You must be at least 18 years old';
+        newErrors.dateOfBirth = '18歳以上である必要があります';
       }
     }
 
@@ -127,37 +127,37 @@ export default function PatientRegister() {
           case 'auth/email-already-in-use':
             setErrors(prev => ({
               ...prev,
-              email: 'An account with this email already exists.'
+              email: 'このメールアドレスは既に使用されています。'
             }));
             break;
           case 'auth/invalid-email':
             setErrors(prev => ({
               ...prev,
-              email: 'Invalid email address.'
+              email: '有効なメールアドレスを入力してください。'
             }));
             break;
           case 'auth/operation-not-allowed':
             setErrors(prev => ({
               ...prev,
-              submit: 'Email/password accounts are not enabled. Please contact support.'
+              submit: 'メール/パスワードアカウントが有効になっていません。サポートにお問い合わせください。'
             }));
             break;
           case 'auth/weak-password':
             setErrors(prev => ({
               ...prev,
-              password: 'Password is too weak. Please use a stronger password.'
+              password: 'パスワードが弱すぎます。より強力なパスワードを使用してください。'
             }));
             break;
           default:
             setErrors(prev => ({
               ...prev,
-              submit: 'Failed to create account. Please try again.'
+              submit: 'アカウントの作成に失敗しました。もう一度お試しください。'
             }));
         }
       } else {
         setErrors(prev => ({
           ...prev,
-          submit: 'An unexpected error occurred. Please try again.'
+          submit: '予期しないエラーが発生しました。もう一度お試しください。'
         }));
       }
     } finally {
@@ -169,12 +169,12 @@ export default function PatientRegister() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account
+          患者新規登録
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Already have an account?{' '}
+          すでにアカウントをお持ちの方は{' '}
           <Link href="/auth/patient/login" className="font-medium text-blue-600 hover:text-blue-500">
-            Sign in
+            サインイン
           </Link>
         </p>
       </div>
@@ -190,7 +190,7 @@ export default function PatientRegister() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  First name
+                  名
                 </label>
                 <div className="mt-1">
                   <input
@@ -212,7 +212,7 @@ export default function PatientRegister() {
 
               <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  Last name
+                  姓
                 </label>
                 <div className="mt-1">
                   <input
@@ -235,7 +235,7 @@ export default function PatientRegister() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                メールアドレス
               </label>
               <div className="mt-1">
                 <input
@@ -258,7 +258,7 @@ export default function PatientRegister() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                パスワード
               </label>
               <div className="mt-1">
                 <input
@@ -280,7 +280,7 @@ export default function PatientRegister() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+                パスワード（確認用）
               </label>
               <div className="mt-1">
                 <input
@@ -302,7 +302,7 @@ export default function PatientRegister() {
 
             <div>
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                Phone number
+                電話番号
               </label>
               <div className="mt-1">
                 <input
@@ -324,7 +324,7 @@ export default function PatientRegister() {
 
             <div>
               <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
-                Date of birth
+                生年月日
               </label>
               <div className="mt-1">
                 <input
@@ -346,7 +346,7 @@ export default function PatientRegister() {
 
             <div>
               <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                Address
+                住所
               </label>
               <div className="mt-1">
                 <input
@@ -372,7 +372,7 @@ export default function PatientRegister() {
                 disabled={isLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
-                {isLoading ? 'Creating account...' : 'Create account'}
+                {isLoading ? '登録中...' : '登録'}
               </button>
             </div>
           </form>

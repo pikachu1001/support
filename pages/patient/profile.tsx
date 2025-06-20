@@ -89,14 +89,14 @@ export default function PatientProfile() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Profile</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">プロフィール</h1>
             </div>
             <div>
               <button
                 onClick={() => setIsEditing(!isEditing)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                {isEditing ? 'Cancel' : 'Edit Profile'}
+                {isEditing ? 'キャンセル' : 'プロフィールを編集'}
               </button>
             </div>
           </div>
@@ -111,11 +111,11 @@ export default function PatientProfile() {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   {/* Personal Information */}
                   <div className="col-span-2">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">個人情報</h3>
                     <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                       <div className="sm:col-span-3">
                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                          First name
+                          名
                         </label>
                         <div className="mt-1">
                           <input
@@ -132,7 +132,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-3">
                         <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                          Last name
+                          姓
                         </label>
                         <div className="mt-1">
                           <input
@@ -149,7 +149,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-4">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                          Email address
+                          メールアドレス
                         </label>
                         <div className="mt-1">
                           <input
@@ -166,7 +166,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-3">
                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                          Phone number
+                          電話番号
                         </label>
                         <div className="mt-1">
                           <input
@@ -183,7 +183,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-3">
                         <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
-                          Date of birth
+                          生年月日
                         </label>
                         <div className="mt-1">
                           <input
@@ -200,7 +200,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-6">
                         <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                          Address
+                          住所
                         </label>
                         <div className="mt-1">
                           <input
@@ -219,11 +219,11 @@ export default function PatientProfile() {
 
                   {/* Emergency Contact */}
                   <div className="col-span-2">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">Emergency Contact</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">緊急連絡先</h3>
                     <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                       <div className="sm:col-span-3">
                         <label htmlFor="emergencyContact.name" className="block text-sm font-medium text-gray-700">
-                          Name
+                          氏名
                         </label>
                         <div className="mt-1">
                           <input
@@ -240,7 +240,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-3">
                         <label htmlFor="emergencyContact.relationship" className="block text-sm font-medium text-gray-700">
-                          Relationship
+                          続柄
                         </label>
                         <div className="mt-1">
                           <input
@@ -257,7 +257,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-3">
                         <label htmlFor="emergencyContact.phoneNumber" className="block text-sm font-medium text-gray-700">
-                          Phone number
+                          電話番号
                         </label>
                         <div className="mt-1">
                           <input
@@ -276,11 +276,11 @@ export default function PatientProfile() {
 
                   {/* Medical History */}
                   <div className="col-span-2">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">Medical History</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">医療履歴</h3>
                     <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                       <div className="sm:col-span-6">
                         <label htmlFor="medicalHistory.conditions" className="block text-sm font-medium text-gray-700">
-                          Medical Conditions
+                          既往症
                         </label>
                         <div className="mt-1">
                           <textarea
@@ -297,7 +297,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-6">
                         <label htmlFor="medicalHistory.allergies" className="block text-sm font-medium text-gray-700">
-                          Allergies
+                          アレルギー
                         </label>
                         <div className="mt-1">
                           <textarea
@@ -314,7 +314,7 @@ export default function PatientProfile() {
 
                       <div className="sm:col-span-6">
                         <label htmlFor="medicalHistory.medications" className="block text-sm font-medium text-gray-700">
-                          Current Medications
+                          現在の服薬
                         </label>
                         <div className="mt-1">
                           <textarea
@@ -348,10 +348,10 @@ export default function PatientProfile() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Saving...
+                        保存中...
                       </>
                     ) : (
-                      'Save Changes'
+                      '変更を保存'
                     )}
                   </button>
                 </div>

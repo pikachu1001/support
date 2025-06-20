@@ -158,7 +158,7 @@ export default function Settings() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Settings</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">設定</h1>
             </div>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function Settings() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                Account
+                アカウント
               </button>
               <button
                 onClick={() => setActiveTab('notifications')}
@@ -187,7 +187,7 @@ export default function Settings() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                Notifications
+                通知
               </button>
               <button
                 onClick={() => setActiveTab('security')}
@@ -197,7 +197,7 @@ export default function Settings() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                Security
+                セキュリティ
               </button>
             </nav>
           </div>
@@ -209,7 +209,7 @@ export default function Settings() {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                      First Name
+                      名
                     </label>
                     <input
                       type="text"
@@ -221,7 +221,7 @@ export default function Settings() {
                   </div>
                   <div>
                     <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                      Last Name
+                      姓
                     </label>
                     <input
                       type="text"
@@ -235,7 +235,7 @@ export default function Settings() {
 
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email
+                    メールアドレス
                   </label>
                   <input
                     type="email"
@@ -248,7 +248,7 @@ export default function Settings() {
 
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                    Phone Number
+                    電話番号
                   </label>
                   <input
                     type="tel"
@@ -262,7 +262,7 @@ export default function Settings() {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
                     <label htmlFor="language" className="block text-sm font-medium text-gray-700">
-                      Language
+                      言語
                     </label>
                     <select
                       id="language"
@@ -270,14 +270,14 @@ export default function Settings() {
                       onChange={(e) => setAccountSettings({ ...accountSettings, language: e.target.value })}
                       className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                     >
-                      <option value="en">English</option>
-                      <option value="es">Spanish</option>
-                      <option value="fr">French</option>
+                      <option value="en">英語</option>
+                      <option value="es">スペイン語</option>
+                      <option value="fr">フランス語</option>
                     </select>
                   </div>
                   <div>
                     <label htmlFor="timezone" className="block text-sm font-medium text-gray-700">
-                      Timezone
+                      タイムゾーン
                     </label>
                     <select
                       id="timezone"
@@ -285,10 +285,10 @@ export default function Settings() {
                       onChange={(e) => setAccountSettings({ ...accountSettings, timezone: e.target.value })}
                       className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                     >
-                      <option value="America/New_York">Eastern Time</option>
-                      <option value="America/Chicago">Central Time</option>
-                      <option value="America/Denver">Mountain Time</option>
-                      <option value="America/Los_Angeles">Pacific Time</option>
+                      <option value="America/New_York">アメリカ東部時間</option>
+                      <option value="America/Chicago">アメリカ中部時間</option>
+                      <option value="America/Denver">アメリカ山岳部時間</option>
+                      <option value="America/Los_Angeles">アメリカ太平洋時間</option>
                     </select>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export default function Settings() {
                     onClick={() => setShowPasswordModal(true)}
                     className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
-                    Change Password
+                    パスワードを変更
                   </button>
                   <button
                     onClick={handleAccountUpdate}
@@ -307,7 +307,7 @@ export default function Settings() {
                       isLoading ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >
-                    {isLoading ? 'Saving...' : 'Save Changes'}
+                    {isLoading ? '保存中...' : '変更を保存'}
                   </button>
                 </div>
               </div>
@@ -372,7 +372,7 @@ export default function Settings() {
                     onClick={() => setShowDeleteModal(true)}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
-                    Delete Account
+                    アカウントを削除
                   </button>
                 </div>
               </div>
@@ -392,12 +392,12 @@ export default function Settings() {
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Change Password</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">パスワードを変更</h3>
                   <div className="mt-4">
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
-                          Current Password
+                          現在のパスワード
                         </label>
                         <input
                           type="password"
@@ -410,7 +410,7 @@ export default function Settings() {
 
                       <div>
                         <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
-                          New Password
+                          新しいパスワード
                         </label>
                         <input
                           type="password"
@@ -423,7 +423,7 @@ export default function Settings() {
 
                       <div>
                         <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                          Confirm New Password
+                          新しいパスワード（確認）
                         </label>
                         <input
                           type="password"
@@ -448,14 +448,14 @@ export default function Settings() {
                       : ''
                   }`}
                 >
-                  {isLoading ? 'Changing...' : 'Change Password'}
+                  {isLoading ? '変更中...' : 'パスワードを変更'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </div>
@@ -479,10 +479,10 @@ export default function Settings() {
                   </svg>
                 </div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Delete Account</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">アカウントを削除</h3>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Are you sure you want to delete your account? This action cannot be undone.
+                      本当にアカウントを削除しますか？この操作は元に戻せません。
                     </p>
                   </div>
                 </div>
@@ -496,14 +496,14 @@ export default function Settings() {
                     isLoading ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                 >
-                  {isLoading ? 'Deleting...' : 'Delete Account'}
+                  {isLoading ? '削除中...' : 'アカウントを削除'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowDeleteModal(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </div>

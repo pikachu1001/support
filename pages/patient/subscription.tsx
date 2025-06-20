@@ -97,7 +97,7 @@ export default function PatientSubscription() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Subscription</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">サブスクリプション</h1>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function PatientSubscription() {
           {/* Current Plan */}
           <div className="bg-white shadow rounded-lg mb-6">
             <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">Current Plan</h3>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">現在のプラン</h3>
               <div className="mt-4">
                 {subscriptionPlans.find(plan => plan.isCurrent) && (
                   <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
@@ -123,7 +123,7 @@ export default function PatientSubscription() {
                           {subscriptionPlans.find(plan => plan.isCurrent)?.name}
                         </h3>
                         <div className="mt-2 text-sm text-blue-700">
-                          <p>Your next billing date is April 1, 2024</p>
+                          <p>次回の請求日は2024年4月1日です</p>
                         </div>
                       </div>
                     </div>
@@ -136,7 +136,7 @@ export default function PatientSubscription() {
           {/* Available Plans */}
           <div className="bg-white shadow rounded-lg mb-6">
             <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">Available Plans</h3>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">利用可能なプラン</h3>
               <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
                 {subscriptionPlans.map(plan => (
                   <div
@@ -148,14 +148,14 @@ export default function PatientSubscription() {
                     <div className="flex-1 min-w-0">
                       <div className="focus:outline-none">
                         <p className="text-sm font-medium text-gray-900">{plan.name}</p>
-                        <p className="text-sm text-gray-500">¥{plan.price.toLocaleString()} / month</p>
+                        <p className="text-sm text-gray-500">¥{plan.price.toLocaleString()} / 月</p>
                         <ul className="mt-4 space-y-2">
                           {plan.features.map((feature, index) => (
                             <li key={index} className="flex items-start">
                               <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                               </svg>
-                              <span className="ml-2 text-sm text-gray-500">{feature}</span>
+                              <span className="ml-2 text-sm text-gray-500">{feature === 'Basic health record access' ? '基本的な健康記録の閲覧' : feature === 'Standard appointment booking' ? '標準的な予約' : feature === 'Email support' ? 'メールサポート' : feature === 'Advanced health record access' ? '高度な健康記録の閲覧' : feature === 'Priority appointment booking' ? '優先予約' : feature === '24/7 support' ? '24時間サポート' : feature === 'Telemedicine consultations' ? '遠隔診療' : feature === 'Health tracking tools' ? '健康管理ツール' : feature}</span>
                             </li>
                           ))}
                         </ul>
@@ -169,7 +169,7 @@ export default function PatientSubscription() {
                           isLoading ? 'opacity-50 cursor-not-allowed' : ''
                         }`}
                       >
-                        {isLoading ? 'Upgrading...' : 'Upgrade'}
+                        {isLoading ? 'アップグレード中...' : 'アップグレード'}
                       </button>
                     )}
                   </div>
@@ -181,7 +181,7 @@ export default function PatientSubscription() {
           {/* Billing History */}
           <div className="bg-white shadow rounded-lg">
             <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">Billing History</h3>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">請求履歴</h3>
               <div className="mt-6">
                 <div className="flex flex-col">
                   <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -191,16 +191,16 @@ export default function PatientSubscription() {
                           <thead className="bg-gray-50">
                             <tr>
                               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Date
+                                日付
                               </th>
                               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Description
+                                説明
                               </th>
                               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Amount
+                                金額
                               </th>
                               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status
+                                ステータス
                               </th>
                             </tr>
                           </thead>
@@ -226,7 +226,7 @@ export default function PatientSubscription() {
                                         : 'bg-red-100 text-red-800'
                                     }`}
                                   >
-                                    {bill.status.charAt(0).toUpperCase() + bill.status.slice(1)}
+                                    {bill.status === 'paid' ? '支払い済み' : bill.status === 'pending' ? '保留中' : '失敗'}
                                   </span>
                                 </td>
                               </tr>

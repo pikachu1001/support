@@ -147,13 +147,14 @@ export default function PatientAppointments() {
                 </svg>
               </Link>
               <h1 className="ml-4 text-xl font-bold text-gray-800">Appointments</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">予約</h1>
             </div>
             <div>
               <button
                 onClick={() => setShowBookingModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Book Appointment
+                予約を追加
               </button>
             </div>
           </div>
@@ -166,6 +167,7 @@ export default function PatientAppointments() {
           <div className="bg-white shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 sm:px-6">
               <h3 className="text-lg font-medium leading-6 text-gray-900">Upcoming Appointments</h3>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">今後の予約</h3>
             </div>
             <ul className="divide-y divide-gray-200">
               {appointments
@@ -178,13 +180,13 @@ export default function PatientAppointments() {
                           <p className="text-sm font-medium text-blue-600 truncate">{appointment.type}</p>
                           <div className="ml-2 flex-shrink-0 flex">
                             <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                              {appointment.status}
+                              {appointment.status === 'scheduled' ? '予約済み' : appointment.status === 'completed' ? '完了' : 'キャンセル'}
                             </p>
                           </div>
                         </div>
                         <div className="ml-2 flex-shrink-0 flex">
                           <p className="text-sm text-gray-500">
-                            {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
+                            {new Date(appointment.date).toLocaleDateString()} {appointment.time}〜
                           </p>
                         </div>
                       </div>
@@ -198,13 +200,13 @@ export default function PatientAppointments() {
                             disabled={isLoading}
                             className="text-red-600 hover:text-red-900"
                           >
-                            Cancel
+                            キャンセル
                           </button>
                         </div>
                       </div>
                       {appointment.notes && (
                         <div className="mt-2">
-                          <p className="text-sm text-gray-500">Notes: {appointment.notes}</p>
+                          <p className="text-sm text-gray-500">備考: {appointment.notes}</p>
                         </div>
                       )}
                     </div>
@@ -217,6 +219,7 @@ export default function PatientAppointments() {
           <div className="mt-6 bg-white shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 sm:px-6">
               <h3 className="text-lg font-medium leading-6 text-gray-900">Past Appointments</h3>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">過去の予約</h3>
             </div>
             <ul className="divide-y divide-gray-200">
               {appointments
@@ -262,11 +265,12 @@ export default function PatientAppointments() {
               <div>
                 <div className="mt-3 text-center sm:mt-5">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">Book an Appointment</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">新しい予約</h3>
                   <div className="mt-4">
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="provider" className="block text-sm font-medium text-gray-700">
-                          Select Provider
+                          医師を選択
                         </label>
                         <select
                           id="provider"
@@ -276,6 +280,7 @@ export default function PatientAppointments() {
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
                           <option value="">Select a provider</option>
+                          <option value="">医師を選択してください</option>
                           {providers.map(provider => (
                             <option key={provider.id} value={provider.id}>
                               {provider.name} - {provider.specialty}
@@ -286,7 +291,7 @@ export default function PatientAppointments() {
 
                       <div>
                         <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-                          Select Date
+                          日付を選択
                         </label>
                         <input
                           type="date"
@@ -300,7 +305,7 @@ export default function PatientAppointments() {
 
                       <div>
                         <label htmlFor="time" className="block text-sm font-medium text-gray-700">
-                          Select Time
+                          時間を選択
                         </label>
                         <select
                           id="time"
@@ -310,6 +315,7 @@ export default function PatientAppointments() {
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
                           <option value="">Select a time</option>
+                          <option value="">時間を選択してください</option>
                           {selectedProvider &&
                             selectedDate &&
                             providers
@@ -325,7 +331,7 @@ export default function PatientAppointments() {
 
                       <div>
                         <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-                          Appointment Type
+                          予約の種類
                         </label>
                         <select
                           id="type"
@@ -335,9 +341,10 @@ export default function PatientAppointments() {
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
                           <option value="">Select type</option>
-                          <option value="General Check-up">General Check-up</option>
-                          <option value="Follow-up">Follow-up</option>
-                          <option value="Consultation">Consultation</option>
+                          <option value="">種類を選択してください</option>
+                          <option value="General Check-up">一般健診</option>
+                          <option value="Follow-up">再診</option>
+                          <option value="Consultation">相談</option>
                         </select>
                       </div>
                     </div>
@@ -355,14 +362,14 @@ export default function PatientAppointments() {
                       : ''
                   }`}
                 >
-                  {isLoading ? 'Booking...' : 'Book Appointment'}
+                  {isLoading ? '予約中...' : '予約を追加'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowBookingModal(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </div>

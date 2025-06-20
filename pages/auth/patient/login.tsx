@@ -21,29 +21,29 @@ export default function PatientLogin() {
       if (!auth.signIn) {
         throw new Error('Authentication not initialized');
       }
-      // await auth.signIn(email, password);---------------------------------------------------------
+      // await auth.signIn(email, password);
       router.push('/patient/dashboard');
     } catch (err) {
       console.error('Login error:', err);
       if (err instanceof FirebaseError) {
         switch (err.code) {
           case 'auth/invalid-email':
-            setError('Invalid email address.');
+            setError('メールアドレスが正しくありません。');
             break;
           case 'auth/user-disabled':
-            setError('This account has been disabled.');
+            setError('このアカウントは無効化されています。');
             break;
           case 'auth/user-not-found':
-            setError('No account found with this email.');
+            setError('このメールアドレスのアカウントは見つかりません。');
             break;
           case 'auth/wrong-password':
-            setError('Incorrect password.');
+            setError('パスワードが正しくありません。');
             break;
           default:
-            setError('Failed to sign in. Please try again.');
+            setError('サインインに失敗しました。もう一度お試しください。');
         }
       } else {
-        setError('An unexpected error occurred. Please try again.');
+        setError('予期しないエラーが発生しました。もう一度お試しください。');
       }
     } finally {
       setIsLoading(false);
@@ -54,7 +54,7 @@ export default function PatientLogin() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Patient Login
+          患者ログイン
         </h2>
       </div>
 
@@ -68,7 +68,7 @@ export default function PatientLogin() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                メールアドレス
               </label>
               <div className="mt-1">
                 <input
@@ -80,13 +80,14 @@ export default function PatientLogin() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="メールアドレスを入力してください"
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                パスワード
               </label>
               <div className="mt-1">
                 <input
@@ -98,6 +99,7 @@ export default function PatientLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="パスワードを入力してください"
                 />
               </div>
             </div>
@@ -108,7 +110,7 @@ export default function PatientLogin() {
                 disabled={isLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'サインイン中...' : 'サインイン'}
               </button>
             </div>
           </form>
@@ -117,9 +119,9 @@ export default function PatientLogin() {
             <div className="relative">
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Don't have an account?{' '}
+                  アカウントをお持ちでない方は{' '}
                   <Link href="/auth/patient/register" className="text-blue-600 hover:text-blue-500">
-                    Register here
+                    新規登録はこちら
                   </Link>
                 </span>
               </div>

@@ -80,14 +80,14 @@ export default function Documents() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Documents</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">書類</h1>
             </div>
             <div>
               <button
                 onClick={() => setShowUploadModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Upload Document
+                書類をアップロード
               </button>
             </div>
           </div>
@@ -106,7 +106,7 @@ export default function Documents() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              All
+              全て
             </button>
             <button
               onClick={() => setSelectedCategory('medical')}
@@ -116,7 +116,7 @@ export default function Documents() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Medical
+              医療
             </button>
             <button
               onClick={() => setSelectedCategory('insurance')}
@@ -126,7 +126,7 @@ export default function Documents() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Insurance
+              保険
             </button>
             <button
               onClick={() => setSelectedCategory('prescription')}
@@ -136,7 +136,7 @@ export default function Documents() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Prescriptions
+              処方箋
             </button>
             <button
               onClick={() => setSelectedCategory('other')}
@@ -146,7 +146,7 @@ export default function Documents() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Other
+              その他
             </button>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function Documents() {
                             : 'bg-gray-100 text-gray-800'
                         }`}
                       >
-                        {document.status}
+                        {document.status === 'verified' ? '確認済み' : document.status === 'processing' ? '処理中' : 'アップロード済み'}
                       </span>
                       <button
                         onClick={() => handleShare(document.id)}
@@ -219,7 +219,7 @@ export default function Documents() {
                   {document.sharedWith && document.sharedWith.length > 0 && (
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Shared with: {document.sharedWith.join(', ')}
+                        共有先: {document.sharedWith.join(', ')}
                       </p>
                     </div>
                   )}
@@ -241,23 +241,23 @@ export default function Documents() {
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Upload Document</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">書類をアップロード</h3>
                   <div className="mt-4">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                        <label className="block text-sm font-medium text-gray-700">カテゴリ</label>
                         <select
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
-                          <option value="medical">Medical</option>
-                          <option value="insurance">Insurance</option>
-                          <option value="prescription">Prescription</option>
-                          <option value="other">Other</option>
+                          <option value="medical">医療</option>
+                          <option value="insurance">保険</option>
+                          <option value="prescription">処方箋</option>
+                          <option value="other">その他</option>
                         </select>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">File</label>
+                        <label className="block text-sm font-medium text-gray-700">ファイル</label>
                         <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                           <div className="space-y-1 text-center">
                             <svg
@@ -279,12 +279,12 @@ export default function Documents() {
                                 htmlFor="file-upload"
                                 className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
                               >
-                                <span>Upload a file</span>
+                                <span>ファイルをアップロード</span>
                                 <input id="file-upload" name="file-upload" type="file" className="sr-only" />
                               </label>
-                              <p className="pl-1">or drag and drop</p>
+                              <p className="pl-1">またはドラッグ＆ドロップ</p>
                             </div>
-                            <p className="text-xs text-gray-500">PDF, JPG, PNG up to 10MB</p>
+                            <p className="text-xs text-gray-500">PDF, JPG, PNG 最大10MB</p>
                           </div>
                         </div>
                       </div>
@@ -298,14 +298,14 @@ export default function Documents() {
                   onClick={handleUpload}
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
                 >
-                  Upload
+                  アップロード
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowUploadModal(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </div>

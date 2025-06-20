@@ -109,14 +109,14 @@ export default function Support() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Support</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">サポート</h1>
             </div>
             <div>
               <button
                 onClick={() => setShowContactModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Contact Support
+                サポートに連絡
               </button>
             </div>
           </div>
@@ -127,9 +127,9 @@ export default function Support() {
         {/* Quick Help */}
         <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
           <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium text-gray-900">Quick Help</h2>
+            <h2 className="text-lg font-medium text-gray-900">クイックヘルプ</h2>
             <p className="mt-1 text-sm text-gray-500">
-              Need immediate assistance? Here are some quick ways to get help.
+              すぐにサポートが必要ですか？こちらからご利用いただけます。
             </p>
           </div>
           <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
@@ -139,8 +139,8 @@ export default function Support() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">Emergency Support</p>
-                  <p className="text-sm text-gray-500">24/7 Emergency Line</p>
+                  <p className="text-sm font-medium text-gray-900">緊急サポート</p>
+                  <p className="text-sm text-gray-500">24時間緊急ライン</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -148,7 +148,7 @@ export default function Support() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">Email Support</p>
+                  <p className="text-sm font-medium text-gray-900">メールサポート</p>
                   <p className="text-sm text-gray-500">support@healthsystem.com</p>
                 </div>
               </div>
@@ -157,8 +157,8 @@ export default function Support() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">Live Chat</p>
-                  <p className="text-sm text-gray-500">Available 9 AM - 5 PM</p>
+                  <p className="text-sm font-medium text-gray-900">ライブチャット</p>
+                  <p className="text-sm text-gray-500">9時～17時利用可能</p>
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function Support() {
         {/* FAQs */}
         <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
           <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium text-gray-900">Frequently Asked Questions</h2>
+            <h2 className="text-lg font-medium text-gray-900">よくある質問</h2>
             <div className="mt-4 flex space-x-4">
               <button
                 onClick={() => setSelectedCategory('all')}
@@ -178,7 +178,7 @@ export default function Support() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                All
+                全て
               </button>
               <button
                 onClick={() => setSelectedCategory('general')}
@@ -188,7 +188,7 @@ export default function Support() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                General
+                一般
               </button>
               <button
                 onClick={() => setSelectedCategory('technical')}
@@ -198,7 +198,7 @@ export default function Support() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                Technical
+                技術
               </button>
               <button
                 onClick={() => setSelectedCategory('billing')}
@@ -208,7 +208,7 @@ export default function Support() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                Billing
+                請求
               </button>
               <button
                 onClick={() => setSelectedCategory('privacy')}
@@ -218,7 +218,7 @@ export default function Support() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                Privacy
+                プライバシー
               </button>
             </div>
           </div>
@@ -237,9 +237,9 @@ export default function Support() {
         {/* Help Resources */}
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium text-gray-900">Help Resources</h2>
+            <h2 className="text-lg font-medium text-gray-900">ヘルプリソース</h2>
             <p className="mt-1 text-sm text-gray-500">
-              Browse our collection of guides, videos, and articles to help you get the most out of the platform.
+              プラットフォームを最大限に活用するためのガイド、動画、記事をご覧ください。
             </p>
           </div>
           <div className="border-t border-gray-200">
@@ -276,7 +276,7 @@ export default function Support() {
                           href={resource.link}
                           className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
-                          View
+                          見る
                         </Link>
                       </div>
                     </div>
@@ -299,12 +299,12 @@ export default function Support() {
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Contact Support</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">サポートに連絡</h3>
                   <div className="mt-4">
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                          Subject
+                          件名
                         </label>
                         <input
                           type="text"
@@ -318,7 +318,7 @@ export default function Support() {
 
                       <div>
                         <label htmlFor="priority" className="block text-sm font-medium text-gray-700">
-                          Priority
+                          優先度
                         </label>
                         <select
                           id="priority"
@@ -327,15 +327,15 @@ export default function Support() {
                           onChange={(e) => setContactForm({ ...contactForm, priority: e.target.value })}
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
-                          <option value="low">Low</option>
-                          <option value="normal">Normal</option>
-                          <option value="high">High</option>
+                          <option value="low">低</option>
+                          <option value="normal">普通</option>
+                          <option value="high">高</option>
                         </select>
                       </div>
 
                       <div>
                         <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                          Message
+                          メッセージ
                         </label>
                         <textarea
                           id="message"
@@ -361,14 +361,14 @@ export default function Support() {
                       : ''
                   }`}
                 >
-                  {isLoading ? 'Sending...' : 'Send Message'}
+                  {isLoading ? '送信中...' : 'メッセージを送信'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowContactModal(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </div>

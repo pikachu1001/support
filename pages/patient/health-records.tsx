@@ -113,7 +113,7 @@ export default function PatientHealthRecords() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Health Records</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">健康記録</h1>
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function PatientHealthRecords() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
-                Medical Records
+                医療記録
               </button>
               <button
                 onClick={() => setActiveTab('prescriptions')}
@@ -142,7 +142,7 @@ export default function PatientHealthRecords() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
-                Prescriptions
+                処方箋
               </button>
               <button
                 onClick={() => setActiveTab('tests')}
@@ -152,7 +152,7 @@ export default function PatientHealthRecords() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
-                Test Results
+                検査結果
               </button>
             </nav>
           </div>
@@ -170,7 +170,7 @@ export default function PatientHealthRecords() {
                             <p className="text-sm font-medium text-blue-600 truncate">{record.title}</p>
                             <div className="ml-2 flex-shrink-0 flex">
                               <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                {record.type}
+                                {record.type === 'consultation' ? '診察' : record.type === 'prescription' ? '処方箋' : record.type === 'test' ? '検査' : record.type}
                               </p>
                             </div>
                           </div>
@@ -188,7 +188,7 @@ export default function PatientHealthRecords() {
                         </div>
                         {record.attachments && record.attachments.length > 0 && (
                           <div className="mt-2">
-                            <p className="text-sm text-gray-500">Attachments:</p>
+                            <p className="text-sm text-gray-500">添付ファイル:</p>
                             <ul className="mt-1 space-y-1">
                               {record.attachments.map((attachment, index) => (
                                 <li key={index} className="text-sm text-blue-600 hover:text-blue-500">
@@ -229,7 +229,7 @@ export default function PatientHealthRecords() {
                                     : 'bg-red-100 text-red-800'
                                 }`}
                               >
-                                {prescription.status}
+                                {prescription.status === 'active' ? '有効' : prescription.status === 'completed' ? '完了' : 'キャンセル'}
                               </p>
                             </div>
                           </div>
@@ -244,11 +244,11 @@ export default function PatientHealthRecords() {
                             </p>
                           </div>
                           <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                            <p>Duration: {prescription.duration}</p>
+                            <p>期間: {prescription.duration}</p>
                           </div>
                         </div>
                         <div className="mt-2">
-                          <p className="text-sm text-gray-500">Prescribed by: {prescription.provider}</p>
+                          <p className="text-sm text-gray-500">担当医: {prescription.provider}</p>
                         </div>
                       </div>
                     </li>
@@ -276,7 +276,7 @@ export default function PatientHealthRecords() {
                                     : 'bg-yellow-100 text-yellow-800'
                                 }`}
                               >
-                                {test.status}
+                                {test.status === 'normal' ? '正常' : test.status === 'abnormal' ? '異常' : '保留中'}
                               </p>
                             </div>
                           </div>
@@ -286,14 +286,14 @@ export default function PatientHealthRecords() {
                         </div>
                         <div className="mt-2 sm:flex sm:justify-between">
                           <div className="sm:flex">
-                            <p className="flex items-center text-sm text-gray-500">Result: {test.result}</p>
+                            <p className="flex items-center text-sm text-gray-500">結果: {test.result}</p>
                           </div>
                           <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                            <p>Reference Range: {test.referenceRange}</p>
+                            <p>基準値: {test.referenceRange}</p>
                           </div>
                         </div>
                         <div className="mt-2">
-                          <p className="text-sm text-gray-500">Provider: {test.provider}</p>
+                          <p className="text-sm text-gray-500">検査機関: {test.provider}</p>
                         </div>
                       </div>
                     </li>

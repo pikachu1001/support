@@ -105,14 +105,14 @@ export default function PatientMessages() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Messages</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">メッセージ</h1>
             </div>
             <div>
               <button
                 onClick={() => setShowNewMessageModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                New Message
+                新規メッセージ
               </button>
             </div>
           </div>
@@ -209,21 +209,21 @@ export default function PatientMessages() {
                         <div className="flex space-x-3">
                           <input
                             type="text"
-                            placeholder="Type your message..."
+                            placeholder="メッセージを入力してください..."
                             className="flex-1 min-w-0 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                           />
                           <button
                             type="button"
                             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                           >
-                            Send
+                            送信
                           </button>
                         </div>
                       </div>
                     </>
                   ) : (
                     <div className="h-full flex items-center justify-center">
-                      <p className="text-gray-500">Select a conversation to view messages</p>
+                      <p className="text-gray-500">メッセージを見るには会話を選択してください</p>
                     </div>
                   )}
                 </div>
@@ -244,12 +244,12 @@ export default function PatientMessages() {
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">New Message</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">新規メッセージ</h3>
                   <div className="mt-4">
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="recipient" className="block text-sm font-medium text-gray-700">
-                          To
+                          宛先
                         </label>
                         <select
                           id="recipient"
@@ -258,15 +258,15 @@ export default function PatientMessages() {
                           onChange={e => setNewMessage({ ...newMessage, recipient: e.target.value })}
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
-                          <option value="">Select recipient</option>
-                          <option value="Dr. Tanaka">Dr. Tanaka</option>
-                          <option value="Dr. Suzuki">Dr. Suzuki</option>
+                          <option value="">宛先を選択</option>
+                          <option value="Dr. Tanaka">田中先生</option>
+                          <option value="Dr. Suzuki">鈴木先生</option>
                         </select>
                       </div>
 
                       <div>
                         <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                          Subject
+                          件名
                         </label>
                         <input
                           type="text"
@@ -280,7 +280,7 @@ export default function PatientMessages() {
 
                       <div>
                         <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-                          Message
+                          メッセージ
                         </label>
                         <textarea
                           id="content"
@@ -306,14 +306,14 @@ export default function PatientMessages() {
                       : ''
                   }`}
                 >
-                  {isLoading ? 'Sending...' : 'Send Message'}
+                  {isLoading ? '送信中...' : 'メッセージを送信'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowNewMessageModal(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </div>

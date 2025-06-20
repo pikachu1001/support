@@ -120,7 +120,7 @@ export default function HealthTracking() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">Health Tracking</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">健康管理</h1>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function HealthTracking() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
             >
-              Vital Signs
+              バイタルサイン
             </button>
             <button
               onClick={() => setActiveTab('symptoms')}
@@ -148,7 +148,7 @@ export default function HealthTracking() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
             >
-              Symptoms
+              症状
             </button>
             <button
               onClick={() => setActiveTab('medications')}
@@ -158,7 +158,7 @@ export default function HealthTracking() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
             >
-              Medications
+              服薬
             </button>
           </nav>
         </div>
@@ -168,12 +168,12 @@ export default function HealthTracking() {
           {activeTab === 'vitals' && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Vital Signs</h2>
+                <h2 className="text-lg font-medium text-gray-900">バイタルサイン</h2>
                 <button
                   onClick={handleAddVitalSign}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Add Vital Sign
+                  バイタルサインを追加
                 </button>
               </div>
               <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -203,12 +203,12 @@ export default function HealthTracking() {
           {activeTab === 'symptoms' && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Symptoms</h2>
+                <h2 className="text-lg font-medium text-gray-900">症状</h2>
                 <button
                   onClick={handleAddSymptom}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Add Symptom
+                  症状を追加
                 </button>
               </div>
               <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -228,7 +228,7 @@ export default function HealthTracking() {
                                   : 'bg-red-100 text-red-800'
                               }`}
                             >
-                              {symptom.severity}
+                              {symptom.severity === 'mild' ? '軽度' : symptom.severity === 'moderate' ? '中等度' : '重度'}
                             </span>
                           </div>
                           <div className="ml-2 flex-shrink-0 flex">
@@ -236,7 +236,7 @@ export default function HealthTracking() {
                           </div>
                         </div>
                         <div className="mt-2">
-                          <p className="text-sm text-gray-500">Duration: {symptom.duration}</p>
+                          <p className="text-sm text-gray-500">期間: {symptom.duration}</p>
                         </div>
                       </div>
                     </li>
@@ -249,12 +249,12 @@ export default function HealthTracking() {
           {activeTab === 'medications' && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Medications</h2>
+                <h2 className="text-lg font-medium text-gray-900">服薬</h2>
                 <button
                   onClick={handleAddMedication}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Add Medication
+                  服薬を追加
                 </button>
               </div>
               <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -274,7 +274,7 @@ export default function HealthTracking() {
                                   : 'bg-red-100 text-red-800'
                               }`}
                             >
-                              {medication.status}
+                              {medication.status === 'active' ? '服用中' : medication.status === 'completed' ? '完了' : '飲み忘れ'}
                             </span>
                           </div>
                           <div className="ml-2 flex-shrink-0 flex">
@@ -283,8 +283,8 @@ export default function HealthTracking() {
                         </div>
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
-                            Frequency: {medication.frequency}
-                            {medication.lastTaken && ` | Last taken: ${medication.lastTaken}`}
+                            頻度: {medication.frequency}
+                            {medication.lastTaken && `｜最終服用: ${medication.lastTaken}`}
                           </p>
                         </div>
                       </div>

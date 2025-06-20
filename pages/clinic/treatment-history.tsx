@@ -68,7 +68,7 @@ export default function TreatmentHistory() {
         {/* Patient Filter */}
         <div className="mb-6">
           <label htmlFor="patient" className="block text-sm font-medium text-gray-700">
-            Filter by Patient
+            患者で絞り込み
           </label>
           <select
             id="patient"
@@ -78,6 +78,7 @@ export default function TreatmentHistory() {
             onChange={(e) => setSelectedPatient(e.target.value)}
           >
             <option value="">All Patients</option>
+            <option value="">全ての患者</option>
             <option value="John Doe">John Doe</option>
             <option value="Jane Smith">Jane Smith</option>
           </select>
@@ -86,7 +87,7 @@ export default function TreatmentHistory() {
         {/* Treatment List */}
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Treatment Records</h3>
+            <h3 className="text-lg leading-6 font-medium text-gray-900">治療記録</h3>
           </div>
           <div className="border-t border-gray-200">
             <ul className="divide-y divide-gray-200">
@@ -100,7 +101,7 @@ export default function TreatmentHistory() {
                           <p className="text-sm font-medium text-blue-600 truncate">{treatment.patientName}</p>
                           <div className="ml-2 flex-shrink-0 flex">
                             <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                              {treatment.status}
+                              {treatment.status === 'completed' ? '完了' : treatment.status === 'ongoing' ? '進行中' : treatment.status === 'scheduled' ? '予定' : treatment.status}
                             </p>
                           </div>
                         </div>

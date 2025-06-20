@@ -35,43 +35,43 @@ export default function ClinicRegister() {
     
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'メールアドレスは必須です';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = '有効なメールアドレスを入力してください';
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'パスワードは必須です';
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters long';
+      newErrors.password = 'パスワードは8文字以上で入力してください';
     }
 
     // Confirm password validation
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'パスワードが一致しません';
     }
 
     // Clinic name validation
     if (!formData.clinicName) {
-      newErrors.clinicName = 'Clinic name is required';
+      newErrors.clinicName = 'クリニック名は必須です';
     }
 
     // Phone validation
     if (!formData.phoneNumber) {
-      newErrors.phoneNumber = 'Phone number is required';
+      newErrors.phoneNumber = '電話番号は必須です';
     } else if (!/^\+?[\d\s-]{10,}$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
+      newErrors.phoneNumber = '有効な電話番号を入力してください';
     }
 
     // Address validation
     if (!formData.address) {
-      newErrors.address = 'Address is required';
+      newErrors.address = '住所は必須です';
     }
 
     // License number validation
     if (!formData.licenseNumber) {
-      newErrors.licenseNumber = 'License number is required';
+      newErrors.licenseNumber = 'ライセンス番号は必須です';
     }
 
     setErrors(newErrors);
@@ -102,7 +102,7 @@ export default function ClinicRegister() {
     setIsLoading(true);
     try {
       // Create user account with Firebase
-      // await signUp(formData.email, formData.password);------------------------------------------------------------------------
+      // await signUp(formData.email, formData.password);
       
       // TODO: Store additional clinic data in your database
       // You can use the user's UID from Firebase to store additional data
@@ -115,37 +115,37 @@ export default function ClinicRegister() {
           case 'auth/email-already-in-use':
             setErrors(prev => ({
               ...prev,
-              email: 'An account with this email already exists.'
+              email: 'このメールアドレスは既に使用されています。'
             }));
             break;
           case 'auth/invalid-email':
             setErrors(prev => ({
               ...prev,
-              email: 'Invalid email address.'
+              email: '有効なメールアドレスを入力してください。'
             }));
             break;
           case 'auth/operation-not-allowed':
             setErrors(prev => ({
               ...prev,
-              submit: 'Email/password accounts are not enabled. Please contact support.'
+              submit: 'メール/パスワードアカウントが有効になっていません。サポートにお問い合わせください。'
             }));
             break;
           case 'auth/weak-password':
             setErrors(prev => ({
               ...prev,
-              password: 'Password is too weak. Please use a stronger password.'
+              password: 'パスワードが弱すぎます。より強力なパスワードを使用してください。'
             }));
             break;
           default:
             setErrors(prev => ({
               ...prev,
-              submit: 'Failed to create account. Please try again.'
+              submit: 'アカウントの作成に失敗しました。もう一度お試しください。'
             }));
         }
       } else {
         setErrors(prev => ({
           ...prev,
-          submit: 'An unexpected error occurred. Please try again.'
+          submit: '予期しないエラーが発生しました。もう一度お試しください。'
         }));
       }
     } finally {
@@ -157,12 +157,12 @@ export default function ClinicRegister() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Register your clinic
+          クリニック新規登録
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Already have an account?{' '}
+          すでにアカウントをお持ちの方は{' '}
           <Link href="/auth/clinic/login" className="font-medium text-blue-600 hover:text-blue-500">
-            Sign in
+            サインイン
           </Link>
         </p>
       </div>
@@ -177,7 +177,7 @@ export default function ClinicRegister() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="clinicName" className="block text-sm font-medium text-gray-700">
-                Clinic Name
+                クリニック名
               </label>
               <div className="mt-1">
                 <input
@@ -190,6 +190,7 @@ export default function ClinicRegister() {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.clinicName ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="クリニック名を入力してください"
                 />
                 {errors.clinicName && (
                   <p className="mt-1 text-sm text-red-600">{errors.clinicName}</p>
@@ -199,20 +200,20 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                メールアドレス
               </label>
               <div className="mt-1">
                 <input
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
                   required
                   value={formData.email}
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.email ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="メールアドレスを入力してください"
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -222,7 +223,7 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                パスワード
               </label>
               <div className="mt-1">
                 <input
@@ -235,6 +236,7 @@ export default function ClinicRegister() {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.password ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="パスワードを入力してください"
                 />
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">{errors.password}</p>
@@ -244,7 +246,7 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+                パスワード（確認用）
               </label>
               <div className="mt-1">
                 <input
@@ -257,6 +259,7 @@ export default function ClinicRegister() {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="もう一度パスワードを入力してください"
                 />
                 {errors.confirmPassword && (
                   <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
@@ -266,19 +269,20 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                Phone number
+                電話番号
               </label>
               <div className="mt-1">
                 <input
                   id="phoneNumber"
                   name="phoneNumber"
-                  type="tel"
+                  type="text"
                   required
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.phoneNumber ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="電話番号を入力してください"
                 />
                 {errors.phoneNumber && (
                   <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>
@@ -288,7 +292,7 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                Address
+                住所
               </label>
               <div className="mt-1">
                 <input
@@ -301,6 +305,7 @@ export default function ClinicRegister() {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.address ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="住所を入力してください"
                 />
                 {errors.address && (
                   <p className="mt-1 text-sm text-red-600">{errors.address}</p>
@@ -310,7 +315,7 @@ export default function ClinicRegister() {
 
             <div>
               <label htmlFor="licenseNumber" className="block text-sm font-medium text-gray-700">
-                License Number
+                ライセンス番号
               </label>
               <div className="mt-1">
                 <input
@@ -323,6 +328,7 @@ export default function ClinicRegister() {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.licenseNumber ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="ライセンス番号を入力してください"
                 />
                 {errors.licenseNumber && (
                   <p className="mt-1 text-sm text-red-600">{errors.licenseNumber}</p>
@@ -336,7 +342,7 @@ export default function ClinicRegister() {
                 disabled={isLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
-                {isLoading ? 'Creating account...' : 'Create account'}
+                {isLoading ? '登録中...' : '登録'}
               </button>
             </div>
           </form>
