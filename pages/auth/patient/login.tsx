@@ -27,9 +27,14 @@ export default function PatientLogin() {
       const { getFirestore, doc, getDoc } = await import('firebase/firestore');
       const db = getFirestore();
       const user = auth.user || (await import('firebase/auth')).getAuth().currentUser;
-      if (!user) throw new Error('User not found after sign in');
+      if (!user) {
+        throw new Error('User not found after sign in');
+      }
+      
       const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (!userDoc.exists()) throw new Error('User data not found');
+      if (!userDoc.exists()) {
+        throw new Error('User data not found');
+      } 
       const userData = userDoc.data();
       if (userData.role !== 'patient') {
         const { signOut } = await import('firebase/auth');

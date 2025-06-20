@@ -1,24 +1,26 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { FaClinicMedical, FaUserMd, FaUser } from 'react-icons/fa';
 
 export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 flex flex-col">
       {/* Navbar */}
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-white/80 shadow-sm backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-gray-800">ヘルスサポートシステム</h1>
+            <div className="flex-shrink-0 flex items-center space-x-2">
+              <span className="text-2xl text-blue-600"><FaClinicMedical /></span>
+              <h1 className="text-2xl font-extrabold text-gray-800 tracking-tight">ヘルスサポートシステム</h1>
             </div>
             <div>
               <Link 
                 href="/auth/admin/login" 
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-md"
               >
-                管理者ログイン
+                <FaUserMd className="mr-2" /> 管理者ログイン
               </Link>
             </div>
           </div>
@@ -26,58 +28,58 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            ヘルスサポートシステムへようこそ
-          </h2>
-          <p className="mt-4 text-xl text-gray-600">
-            健康とウェルネスの信頼できるパートナー
-          </p>
+      <section className="flex-1 flex flex-col justify-center items-center text-center py-16 px-4 bg-gradient-to-br from-blue-100/60 to-purple-100/60">
+        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-lg">ようこそ、<span className="text-blue-600">ヘルスサポート</span>の世界へ</h2>
+        <p className="mt-2 text-lg sm:text-2xl text-gray-600 max-w-2xl mx-auto mb-8">健康とウェルネスの信頼できるパートナー。患者様、クリニック、管理者のためのスマートなサブスクリプション管理。</p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+          <button
+            onClick={() => router.push('/auth/patient/login')}
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-lg font-semibold rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 shadow-lg transition"
+          >
+            <FaUser className="mr-2" /> 患者ログイン
+          </button>
+          <button
+            onClick={() => router.push('/auth/clinic/login')}
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-lg font-semibold rounded-md text-white bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 shadow-lg transition"
+          >
+            <FaClinicMedical className="mr-2" /> クリニックログイン
+          </button>
         </div>
+      </section>
 
-        {/* Subscription Plans */}
-        <div className="mt-16">
-          <h3 className="text-2xl font-bold text-center mb-8">プランを選択してください</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {['A', 'B', 'C'].map((plan) => (
-              <div key={plan} className="bg-white rounded-lg shadow-lg p-6">
-                <h4 className="text-xl font-bold mb-4">プラン{plan}</h4>
-                <p className="text-gray-600 mb-4">
-                  {plan === 'A' ? '月額3,000円' : 
-                   plan === 'B' ? '月額4,000円' : 
-                   '月額5,000円'}
-                </p>
-                <button
-                  onClick={() => router.push('/auth/patient/login')}
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-                >
-                  このプランを選択
-                </button>
+      {/* Subscription Plans */}
+      <section className="max-w-5xl mx-auto py-12 px-4">
+        <h3 className="text-3xl font-bold text-center mb-10 text-gray-800">プランを選択してください</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { plan: 'A', price: '月額3,000円', desc: 'ベーシックサポート', clinic: '2,000円', company: '1,000円', color: 'from-blue-400 to-blue-600' },
+            { plan: 'B', price: '月額4,000円', desc: 'スタンダードサポート', clinic: '2,500円', company: '1,500円', color: 'from-purple-400 to-purple-600' },
+            { plan: 'C', price: '月額5,000円', desc: 'プレミアムサポート', clinic: '3,000円', company: '2,000円', color: 'from-pink-400 to-pink-600' },
+          ].map(({ plan, price, desc, clinic, company, color }) => (
+            <div key={plan} className={`rounded-2xl shadow-xl bg-white/90 border-t-4 border-b-4 border-transparent hover:border-blue-400 transition p-8 flex flex-col items-center relative overflow-hidden`}> 
+              <div className={`absolute inset-0 z-0 bg-gradient-to-br ${color} opacity-10 pointer-events-none`} />
+              <span className="text-2xl font-bold text-blue-600 mb-2">プラン{plan}</span>
+              <span className="text-3xl font-extrabold text-gray-900 mb-2">{price}</span>
+              <span className="text-base text-gray-500 mb-4">{desc}</span>
+              <div className="flex flex-col items-center mb-4">
+                <span className="text-sm text-gray-700">クリニック受取: <span className="font-bold text-green-600">{clinic}</span></span>
+                <span className="text-sm text-gray-700">会社受取: <span className="font-bold text-purple-600">{company}</span></span>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={() => router.push('/auth/patient/login')}
+                className="mt-auto w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-blue-800 transition"
+              >
+                このプランを選択
+              </button>
+            </div>
+          ))}
         </div>
+      </section>
 
-        {/* Login Options */}
-        <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold mb-8">クリニックまたは患者としてログイン</h3>
-          <div className="flex justify-center space-x-4">
-            <button
-              onClick={() => router.push('/auth/clinic/login')}
-              className="bg-green-600 text-white py-3 px-8 rounded-lg hover:bg-green-700"
-            >
-              クリニックの方はこちら
-            </button>
-            <button
-              onClick={() => router.push('/auth/patient/login')}
-              className="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700"
-            >
-              患者の方はこちら
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Footer */}
+      <footer className="mt-auto py-6 bg-white/80 text-center text-gray-500 text-sm shadow-inner">
+        &copy; {new Date().getFullYear()} ヘルスサポートシステム. All rights reserved.
+      </footer>
     </div>
   );
 } 

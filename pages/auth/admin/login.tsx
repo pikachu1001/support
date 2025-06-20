@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAuth } from '../../../contexts/AuthContext';
+import { FirebaseError } from 'firebase/app';
 
 interface FormErrors {
   email?: string;
@@ -16,6 +18,7 @@ export default function AdminLogin() {
     email: '',
     password: '',
   });
+  const { signIn } = useAuth();
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -59,14 +62,43 @@ export default function AdminLogin() {
 
     setIsLoading(true);
     try {
-      // TODO: Implement actual admin authentication
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      if (!signIn) {
+        throw new Error('Authentication not initialized');
+      }
+      await signIn(formData.email, formData.password);
+
+      // Fetch user data from Firestore
+      const { getFirestore, doc, getDoc } = await import('firebase/firestore');
+      const db = getFirestore();
+      const user = (await import('firebase/auth')).getAuth().currentUser;
+      if (!user) throw new Error('User not found after sign in');
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (!userDoc.exists()) throw new Error('User data not found');
+      const userData = userDoc.data();
+      if (userData.role !== 'admin') {
+        const { signOut } = await import('firebase/auth');
+        const { auth } = await import('../../../lib/firebase');
+        await signOut(auth!);
+        setErrors(prev => ({
+          ...prev,
+          submit: '管理者アカウントでログインしてください。'
+        }));
+        setIsLoading(false);
+        return;
+      }
       router.push('/admin/dashboard');
     } catch (error) {
-      setErrors(prev => ({
-        ...prev,
-        submit: 'ログインに失敗しました。認証情報を確認して再度お試しください。'
-      }));
+      if (error instanceof FirebaseError) {
+        setErrors(prev => ({
+          ...prev,
+          submit: 'ログインに失敗しました。認証情報を確認して再度お試しください。'
+        }));
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          submit: '予期しないエラーが発生しました。もう一度お試しください。'
+        }));
+      }
     } finally {
       setIsLoading(false);
     }
