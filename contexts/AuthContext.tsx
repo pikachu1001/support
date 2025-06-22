@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { getFirestore, doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
+import { UserProfile } from '../lib/firestore-types';
 
 interface AuthContextType {
   user: User | null;
@@ -16,7 +17,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, role: "patient" | "clinic") => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  userData: any;
+  userData: UserProfile | null;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -25,7 +26,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(firebaseUser);
       if (firebaseUser) {
         const docSnap = await getDoc(doc(db, "users", firebaseUser.uid));
-        setUserData(docSnap.exists() ? docSnap.data() : null);
+        setUserData(docSnap.exists() ? docSnap.data() as UserProfile : null);
       } else {
         setUserData(null);
       }
@@ -57,12 +58,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     const db = getFirestore();
-    await setDoc(doc(db, "users", user.uid), {
+
+    const userProfileData: Omit<UserProfile, 'createdAt'> = {
       uid: user.uid,
-      email: user.email,
+      email: user.email!,
       role,
+    };
+
+    const userDocWithTimestamp = {
+      ...userProfileData,
       createdAt: serverTimestamp(),
-    });
+    };
+
+    await setDoc(doc(db, "users", user.uid), userDocWithTimestamp);
+
+    if (role === 'patient') {
+      await setDoc(doc(db, "patients", user.uid), {
+        uid: user.uid,
+        profile: userDocWithTimestamp,
+      });
+    } else if (role === 'clinic') {
+      await setDoc(doc(db, "clinics", user.uid), {
+        uid: user.uid,
+        profile: userDocWithTimestamp,
+        clinicName: `${user.email}'s Clinic`, // Placeholder name
+        baseFeeStatus: 'pending',
+      });
+    }
   };
 
   const signIn = async (email: string, password: string) => {

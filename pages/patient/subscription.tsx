@@ -1,93 +1,64 @@
 import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { getFirestore, doc, setDoc, updateDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
-interface SubscriptionPlan {
-  id: string;
-  name: string;
-  price: number;
-  features: string[];
-  isCurrent: boolean;
-}
-
-interface BillingHistory {
-  id: string;
-  date: string;
-  amount: number;
-  status: 'paid' | 'pending' | 'failed';
-  description: string;
-}
+import { plans, Plan } from '../../lib/plans';
 
 export default function PatientSubscription() {
   const router = useRouter();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
-  const [subscriptionPlans] = useState<SubscriptionPlan[]>([
-    {
-      id: 'basic',
-      name: 'Basic Plan',
-      price: 1000,
-      features: [
-        'Basic health record access',
-        'Standard appointment booking',
-        'Email support',
-      ],
-      isCurrent: true,
-    },
-    {
-      id: 'premium',
-      name: 'Premium Plan',
-      price: 2000,
-      features: [
-        'Advanced health record access',
-        'Priority appointment booking',
-        '24/7 support',
-        'Telemedicine consultations',
-        'Health tracking tools',
-      ],
-      isCurrent: false,
-    },
-  ]);
+  const handleSelectPlan = async (plan: Plan) => {
+    if (!user) {
+      // Redirect to login if user is not authenticated
+      router.push('/patient/login');
+      return;
+    }
 
-  const [billingHistory] = useState<BillingHistory[]>([
-    {
-      id: '1',
-      date: '2024-03-01',
-      amount: 1000,
-      status: 'paid',
-      description: 'Basic Plan - Monthly Subscription',
-    },
-    {
-      id: '2',
-      date: '2024-02-01',
-      amount: 1000,
-      status: 'paid',
-      description: 'Basic Plan - Monthly Subscription',
-    },
-    {
-      id: '3',
-      date: '2024-01-01',
-      amount: 1000,
-      status: 'paid',
-      description: 'Basic Plan - Monthly Subscription',
-    },
-  ]);
-
-  const handleUpgrade = async (planId: string) => {
     setIsLoading(true);
+    setSelectedPlan(plan);
+    console.log('Selected plan:', plan);
+    console.log('User:', user);
+
     try {
-      // TODO: Implement actual plan upgrade
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      const db = getFirestore();
+      
+      // 1. Create a new subscription document in 'subscriptions' collection
+      const subscriptionRef = doc(collection(db, 'subscriptions'));
+      await setDoc(subscriptionRef, {
+        id: subscriptionRef.id,
+        userId: user.uid,
+        planId: plan.id,
+        status: 'pending',
+        createdAt: serverTimestamp(),
+      });
+
+      // 2. Update the patient's document in 'patients' collection
+      const patientRef = doc(db, 'patients', user.uid);
+      await updateDoc(patientRef, {
+        subscriptionId: subscriptionRef.id,
+      });
+
+      console.log(`Created pending subscription with ID: ${subscriptionRef.id}`);
+      
+      alert(`You have selected ${plan.name}. Proceeding to payment...`);
+      // In the next step, we will use the subscriptionRef.id to create a Stripe Checkout session.
+      // router.push(`/checkout?sub_id=${subscriptionRef.id}`);
+
     } catch (error) {
-      console.error('Failed to upgrade plan:', error);
+      console.error('Failed to create subscription:', error);
+      alert('サブスクリプションの作成中にエラーが発生しました。');
     } finally {
       setIsLoading(false);
+      setSelectedPlan(null);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Top Navigation */}
+    <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -97,151 +68,73 @@ export default function PatientSubscription() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-800">サブスクリプション</h1>
+              <h1 className="ml-4 text-xl font-bold text-gray-800">プランを選択</h1>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {/* Current Plan */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">現在のプラン</h3>
-              <div className="mt-4">
-                {subscriptionPlans.find(plan => plan.isCurrent) && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <svg className="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <h3 className="text-sm font-medium text-blue-800">
-                          {subscriptionPlans.find(plan => plan.isCurrent)?.name}
-                        </h3>
-                        <div className="mt-2 text-sm text-blue-700">
-                          <p>次回の請求日は2024年4月1日です</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+      <main className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            あなたに合ったプランをお選びください
+          </h2>
+          <p className="mt-4 text-lg text-gray-500">
+            全てのプランには、クリニックと私たちの会社への手数料の内訳が明記されています。
+          </p>
+        </div>
 
-          {/* Available Plans */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">利用可能なプラン</h3>
-              <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                {subscriptionPlans.map(plan => (
-                  <div
-                    key={plan.id}
-                    className={`relative rounded-lg border ${
-                      plan.isCurrent ? 'border-blue-500' : 'border-gray-300'
-                    } bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400`}
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="focus:outline-none">
-                        <p className="text-sm font-medium text-gray-900">{plan.name}</p>
-                        <p className="text-sm text-gray-500">¥{plan.price.toLocaleString()} / 月</p>
-                        <ul className="mt-4 space-y-2">
-                          {plan.features.map((feature, index) => (
-                            <li key={index} className="flex items-start">
-                              <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              <span className="ml-2 text-sm text-gray-500">{feature === 'Basic health record access' ? '基本的な健康記録の閲覧' : feature === 'Standard appointment booking' ? '標準的な予約' : feature === 'Email support' ? 'メールサポート' : feature === 'Advanced health record access' ? '高度な健康記録の閲覧' : feature === 'Priority appointment booking' ? '優先予約' : feature === '24/7 support' ? '24時間サポート' : feature === 'Telemedicine consultations' ? '遠隔診療' : feature === 'Health tracking tools' ? '健康管理ツール' : feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    {!plan.isCurrent && (
-                      <button
-                        onClick={() => handleUpgrade(plan.id)}
-                        disabled={isLoading}
-                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                          isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
-                      >
-                        {isLoading ? 'アップグレード中...' : 'アップグレード'}
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Billing History */}
-          <div className="bg-white shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">請求履歴</h3>
-              <div className="mt-6">
-                <div className="flex flex-col">
-                  <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                日付
-                              </th>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                説明
-                              </th>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                金額
-                              </th>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                ステータス
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            {billingHistory.map(bill => (
-                              <tr key={bill.id}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {new Date(bill.date).toLocaleDateString()}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {bill.description}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  ¥{bill.amount.toLocaleString()}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span
-                                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                      bill.status === 'paid'
-                                        ? 'bg-green-100 text-green-800'
-                                        : bill.status === 'pending'
-                                        ? 'bg-yellow-100 text-yellow-800'
-                                        : 'bg-red-100 text-red-800'
-                                    }`}
-                                  >
-                                    {bill.status === 'paid' ? '支払い済み' : bill.status === 'pending' ? '保留中' : '失敗'}
-                                  </span>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
+        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {plans.map((plan) => (
+            <div
+              key={plan.id}
+              className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200 bg-white flex flex-col"
+            >
+              <div className="p-6">
+                <h3 className="text-2xl font-semibold text-gray-900">{plan.name}</h3>
+                <p className="mt-2 text-gray-500">{plan.description}</p>
+                <p className="mt-4">
+                  <span className="text-4xl font-extrabold text-gray-900">¥{plan.price.toLocaleString()}</span>
+                  <span className="text-base font-medium text-gray-500">/月</span>
+                </p>
+                <div className="mt-4 text-sm text-gray-600 p-3 bg-gray-100 rounded-md">
+                  <p className="font-semibold">料金内訳:</p>
+                  <p>クリニックへの報酬: ¥{plan.commission.toLocaleString()}</p>
+                  <p>会社への手数料: ¥{plan.companyCut.toLocaleString()}</p>
                 </div>
               </div>
+
+              <div className="p-6 flex-grow">
+                <h4 className="font-semibold text-gray-900">含まれる機能:</h4>
+                <ul className="mt-4 space-y-3">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span className="ml-3 text-sm text-gray-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="p-6">
+                <button
+                  onClick={() => handleSelectPlan(plan)}
+                  disabled={isLoading}
+                  className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+                    ${isLoading && selectedPlan?.id === plan.id ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} 
+                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors`}
+                >
+                  {isLoading && selectedPlan?.id === plan.id ? '処理中...' : `${plan.name} を選択`}
+                </button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 } 
