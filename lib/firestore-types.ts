@@ -8,40 +8,68 @@ export interface UserProfile {
   createdAt: Timestamp;
 }
 
+// User (all roles)
+export interface User {
+  uid: string;
+  role: 'patient' | 'clinic' | 'admin';
+  email: string;
+  displayName: string;
+  createdAt: any; // Firestore Timestamp
+  clinicId?: string; // for patients
+  profile?: {
+    phone?: string;
+    address?: string;
+  };
+}
+
 // Data for a patient, stored in 'patients' collection
 export interface Patient {
-  uid: string; // Corresponds to auth user uid
-  profile: UserProfile;
-  clinicId?: string; // ID of the clinic they are associated with
-  subscriptionId?: string; // ID of their current subscription in the 'subscriptions' collection
+  patientId: string;
+  userId: string;
+  clinicId: string;
+  subscriptionId?: string;
+  plan?: string;
+  status: 'active' | 'cancelled' | 'suspended' | 'pending';
+  joinedAt: any; // Firestore Timestamp
 }
 
 // Data for a clinic, stored in 'clinics' collection
 export interface Clinic {
-  uid: string; // Corresponds to auth user uid
-  profile: UserProfile;
-  clinicName: string;
-  baseFeeStatus: 'active' | 'inactive' | 'pending';
+  clinicId: string;
+  name: string;
+  email: string;
+  baseFeeStatus: 'active' | 'unpaid' | 'suspended';
+  referredPatients: string[];
+  commissionEarned: number;
+  createdAt: any; // Firestore Timestamp
 }
 
 // Data for a subscription, stored in 'subscriptions' collection
 export interface Subscription {
-  id: string; // The document ID
-  userId: string;
-  planId: 'A' | 'B' | 'C';
-  status: 'pending' | 'active' | 'cancelled' | 'failed';
-  createdAt: Timestamp;
-  stripeSubscriptionId?: string; // From Stripe
+  subscriptionId: string;
+  patientId: string;
+  clinicId: string;
+  plan: string;
+  stripeSubscriptionId: string;
+  stripeCustomerId: string;
+  status: 'active' | 'cancelled' | 'past_due';
+  amount: number;
+  clinicCommission: number;
+  adminRevenue: number;
+  createdAt: any; // Firestore Timestamp
+  updatedAt: any; // Firestore Timestamp
 }
 
-// Data for the activity feed, stored in 'activity_feed' collection
-export interface ActivityEvent {
-  id: string; // The document ID
-  timestamp: Timestamp;
-  type: 'new_patient' | 'new_subscription' | 'payment_success' | 'payment_failure';
-  details: {
-    message: string;
-    userId?: string;
-    clinicId?: string;
+// Activity Feed
+export interface ActivityFeed {
+  activityId: string;
+  type: 'new_signup' | 'payment_success' | 'payment_failed';
+  userId: string;
+  clinicId: string;
+  message: string;
+  timestamp: any; // Firestore Timestamp
+  details?: {
+    plan?: string;
+    amount?: number;
   };
 } 
