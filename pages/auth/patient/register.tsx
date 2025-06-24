@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../../../contexts/AuthContext';
 import { FirebaseError } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 interface FormErrors {
   email?: string;
@@ -10,10 +11,15 @@ interface FormErrors {
   confirmPassword?: string;
   firstName?: string;
   lastName?: string;
-  phoneNumber?: string;
+  clinicId?: string;
   address?: string;
   dateOfBirth?: string;
   submit?: string;
+}
+
+interface Clinic {
+  id: string;
+  name: string;
 }
 
 export default function PatientRegister() {
@@ -27,10 +33,31 @@ export default function PatientRegister() {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phoneNumber: '',
+    clinicId: '',
     address: '',
     dateOfBirth: '',
   });
+  const [clinics, setClinics] = useState<Clinic[]>([]);
+
+  useEffect(() => {
+    const fetchClinics = async () => {
+      try {
+        const db = getFirestore();
+        const clinicsCollection = collection(db, 'clinics');
+        const querySnapshot = await getDocs(clinicsCollection);
+        const clinicsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          name: doc.data().clinicName || `クリニックID: ${doc.id}` // Fallback name
+        }));
+        setClinics(clinicsList);
+      } catch (error) {
+        console.error("クリニックの取得に失敗しました:", error);
+        // Optionally set an error state to show in the UI
+      }
+    };
+
+    fetchClinics();
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -62,11 +89,9 @@ export default function PatientRegister() {
       newErrors.lastName = '姓は必須です';
     }
 
-    // Phone validation
-    if (!formData.phoneNumber) {
-      newErrors.phoneNumber = '電話番号は必須です';
-    } else if (!/^\+?[\d\s-]{10,}$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = '有効な電話番号を入力してください';
+    // Clinic ID validation
+    if (!formData.clinicId) {
+      newErrors.clinicId = 'クリニックを選択してください';
     }
 
     // Address validation
@@ -90,7 +115,7 @@ export default function PatientRegister() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -114,7 +139,7 @@ export default function PatientRegister() {
     setIsLoading(true);
     try {
       // Create user account with Firebase
-      await signUp(formData.email, formData.password, "patient");
+      await signUp(formData.email, formData.password, "patient", { clinicId: formData.clinicId });
       
       // TODO: Store additional user data in your database
       // You can use the user's UID from Firebase to store additional data
@@ -301,23 +326,29 @@ export default function PatientRegister() {
             </div>
 
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                電話番号
+              <label htmlFor="clinicId" className="block text-sm font-medium text-gray-700">
+                所属クリニック
               </label>
               <div className="mt-1">
-                <input
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  type="tel"
+                <select
+                  id="clinicId"
+                  name="clinicId"
                   required
-                  value={formData.phoneNumber}
+                  value={formData.clinicId}
                   onChange={handleChange}
                   className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.phoneNumber ? 'border-red-300' : 'border-gray-300'
+                    errors.clinicId ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.phoneNumber && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>
+                >
+                  <option value="">クリニックを選択してください</option>
+                  {clinics.map((clinic) => (
+                    <option key={clinic.id} value={clinic.id}>
+                      {clinic.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.clinicId && (
+                  <p className="mt-1 text-sm text-red-600">{errors.clinicId}</p>
                 )}
               </div>
             </div>

@@ -14,7 +14,7 @@ import { UserProfile } from '../lib/firestore-types';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signUp: (email: string, password: string, role: "patient" | "clinic") => Promise<void>;
+  signUp: (email: string, password: string, role: "patient" | "clinic", details: { clinicId?: string }) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   userData: UserProfile | null;
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, role: "patient" | "clinic") => {
+  const signUp = async (email: string, password: string, role: "patient" | "clinic", details: { clinicId?: string } = {}) => {
     if (!auth) {
       throw new Error('Firebase auth is not initialized');
     }
@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await setDoc(doc(db, "patients", user.uid), {
         uid: user.uid,
         profile: userDocWithTimestamp,
+        clinicId: details.clinicId || 'unassigned',
       });
     } else if (role === 'clinic') {
       await setDoc(doc(db, "clinics", user.uid), {
