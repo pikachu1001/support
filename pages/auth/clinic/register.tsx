@@ -101,12 +101,14 @@ export default function ClinicRegister() {
 
     setIsLoading(true);
     try {
-      await signUp(formData.email, formData.password, "clinic");
+      await signUp(formData.email, formData.password, "clinic", {
+        clinicName: formData.clinicName,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+        licenseNumber: formData.licenseNumber,
+      });
       
-      // TODO: Store additional clinic data in your database
-      // You can use the user's UID from Firebase to store additional data
-      
-      router.push('/auth/clinic/login');
+      router.push('/clinic/dashboard');
     } catch (err) {
       console.error('Registration error:', err);
       if (err instanceof FirebaseError) {

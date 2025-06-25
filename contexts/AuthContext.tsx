@@ -14,7 +14,7 @@ import { UserProfile } from '../lib/firestore-types';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signUp: (email: string, password: string, role: "patient" | "clinic", details: { clinicId?: string }) => Promise<void>;
+  signUp: (email: string, password: string, role: "patient" | "clinic", details?: any) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   userData: UserProfile | null;
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, role: "patient" | "clinic", details: { clinicId?: string } = {}) => {
+  const signUp = async (email: string, password: string, role: "patient" | "clinic", details: any = {}) => {
     if (!auth) {
       throw new Error('Firebase auth is not initialized');
     }
@@ -59,30 +59,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const user = userCredential.user;
     const db = getFirestore();
 
-    const userProfileData: Omit<UserProfile, 'createdAt'> = {
+    const userProfileData = {
       uid: user.uid,
       email: user.email!,
       role,
-    };
-
-    const userDocWithTimestamp = {
-      ...userProfileData,
       createdAt: serverTimestamp(),
+      ...details
     };
 
-    await setDoc(doc(db, "users", user.uid), userDocWithTimestamp);
+    await setDoc(doc(db, "users", user.uid), userProfileData);
 
     if (role === 'patient') {
       await setDoc(doc(db, "patients", user.uid), {
-        uid: user.uid,
-        profile: userDocWithTimestamp,
+        userId: user.uid,
+        ...userProfileData,
         clinicId: details.clinicId || 'unassigned',
       });
     } else if (role === 'clinic') {
       await setDoc(doc(db, "clinics", user.uid), {
-        uid: user.uid,
-        profile: userDocWithTimestamp,
-        clinicName: `${user.email}'s Clinic`, // Placeholder name
+        clinicId: user.uid,
+        ...userProfileData,
         baseFeeStatus: 'pending',
       });
     }

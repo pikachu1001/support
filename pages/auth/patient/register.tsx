@@ -139,10 +139,13 @@ export default function PatientRegister() {
     setIsLoading(true);
     try {
       // Create user account with Firebase
-      await signUp(formData.email, formData.password, "patient", { clinicId: formData.clinicId });
-      
-      // TODO: Store additional user data in your database
-      // You can use the user's UID from Firebase to store additional data
+      await signUp(formData.email, formData.password, "patient", { 
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        clinicId: formData.clinicId,
+        address: formData.address,
+        dateOfBirth: formData.dateOfBirth,
+      });
       
       router.push('/patient/dashboard');
     } catch (err) {

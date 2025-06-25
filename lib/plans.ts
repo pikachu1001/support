@@ -52,30 +52,3 @@ export const plans: Plan[] = [
     ],
   },
 ];
-
-export const PLANS = [
-  {
-    id: "A",
-    name: "プランA",
-    total: 3000,
-    clinicCommission: 2000,
-    adminRevenue: 1000,
-    description: "ベーシックサポートプラン"
-  },
-  {
-    id: "B",
-    name: "プランB",
-    total: 4000,
-    clinicCommission: 2500,
-    adminRevenue: 1500,
-    description: "スタンダードサポートプラン"
-  },
-  {
-    id: "C",
-    name: "プランC",
-    total: 5000,
-    clinicCommission: 3000,
-    adminRevenue: 2000,
-    description: "プレミアムサポートプラン"
-  }
-]; 

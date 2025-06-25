@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import DashboardLayout from '../../components/DashboardLayout';
 
 interface Appointment {
   id: string;
@@ -21,6 +22,7 @@ interface Patient {
   medicalHistory: string[];
   insuranceProvider?: string;
   subscriptionPlan?: string;
+  totalEarnings: number;
 }
 
 interface ClinicStats {
@@ -67,6 +69,7 @@ export default function ClinicDashboard() {
       medicalHistory: ['Regular check-up', 'Blood test'],
       insuranceProvider: 'HealthCare Plus',
       subscriptionPlan: 'Plan A',
+      totalEarnings: 350000,
     },
     {
       id: '2',
@@ -76,6 +79,7 @@ export default function ClinicDashboard() {
       medicalHistory: ['Consultation', 'X-ray'],
       insuranceProvider: 'MediShield',
       subscriptionPlan: 'Plan B',
+      totalEarnings: 350000,
     },
   ]);
 
@@ -98,200 +102,202 @@ export default function ClinicDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Top Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-gray-800">クリニックダッシュボード</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.push('/clinic/appointments/new')}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                新規予約
-              </button>
-              <button
-                onClick={() => {
-                  // Clear any clinic-related data from localStorage/session
-                  localStorage.removeItem('clinicToken');
-                  sessionStorage.removeItem('clinicData');
-                  // Redirect to home page
-                  router.push('/');
-                }}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                ログアウト
-              </button>
+    <DashboardLayout allowedRoles={['clinic']}>
+      <div className="min-h-screen bg-gray-100">
+        {/* Top Navigation */}
+        <nav className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              <div className="flex items-center">
+                <h1 className="text-xl font-bold text-gray-800">クリニックダッシュボード</h1>
+              </div>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => router.push('/clinic/appointments/new')}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  新規予約
+                </button>
+                <button
+                  onClick={() => {
+                    // Clear any clinic-related data from localStorage/session
+                    localStorage.removeItem('clinicToken');
+                    sessionStorage.removeItem('clinicData');
+                    // Redirect to home page
+                    router.push('/');
+                  }}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  ログアウト
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      <div className="flex">
-        {/* Sidebar Navigation */}
-        <div className="w-64 bg-white shadow-sm h-screen">
-          <nav className="mt-5 px-2">
-            <div className="space-y-1">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
-                    router.pathname === item.href
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <svg
-                    className={`mr-3 h-6 w-6 ${
+        <div className="flex">
+          {/* Sidebar Navigation */}
+          <div className="w-64 bg-white shadow-sm h-screen">
+            <nav className="mt-5 px-2">
+              <div className="space-y-1">
+                {navigationItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                       router.pathname === item.href
-                        ? 'text-gray-500'
-                        : 'text-gray-400 group-hover:text-gray-500'
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                  </svg>
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </nav>
-        </div>
+                    <svg
+                      className={`mr-3 h-6 w-6 ${
+                        router.pathname === item.href
+                          ? 'text-gray-500'
+                          : 'text-gray-400 group-hover:text-gray-500'
+                      }`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                    </svg>
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
-          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
+          {/* Main Content */}
+          <div className="flex-1">
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="bg-white overflow-hidden shadow rounded-lg">
+                  <div className="p-5">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      </div>
+                      <div className="ml-5 w-0 flex-1">
+                        <dl>
+                          <dt className="text-sm font-medium text-gray-500 truncate">総患者数</dt>
+                          <dd className="flex items-baseline">
+                            <div className="text-2xl font-semibold text-gray-900">{stats.totalPatients}</div>
+                          </dd>
+                        </dl>
+                      </div>
                     </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">総患者数</dt>
-                        <dd className="flex items-baseline">
-                          <div className="text-2xl font-semibold text-gray-900">{stats.totalPatients}</div>
-                        </dd>
-                      </dl>
+                  </div>
+                </div>
+
+                <div className="bg-white overflow-hidden shadow rounded-lg">
+                  <div className="p-5">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div className="ml-5 w-0 flex-1">
+                        <dl>
+                          <dt className="text-sm font-medium text-gray-500 truncate">本日の予約数</dt>
+                          <dd className="flex items-baseline">
+                            <div className="text-2xl font-semibold text-gray-900">{stats.appointmentsToday}</div>
+                          </dd>
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white overflow-hidden shadow rounded-lg">
+                  <div className="p-5">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="ml-5 w-0 flex-1">
+                        <dl>
+                          <dt className="text-sm font-medium text-gray-500 truncate">有効サブスクリプション</dt>
+                          <dd className="flex items-baseline">
+                            <div className="text-2xl font-semibold text-gray-900">{stats.activeSubscriptions}</div>
+                          </dd>
+                        </dl>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">本日の予約数</dt>
-                        <dd className="flex items-baseline">
-                          <div className="text-2xl font-semibold text-gray-900">{stats.appointmentsToday}</div>
-                        </dd>
-                      </dl>
-                    </div>
-                  </div>
+              {/* Today's Appointments */}
+              <div className="mt-8">
+                <h2 className="text-lg font-medium text-gray-900">Today's Appointments</h2>
+                <div className="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
+                  <ul className="divide-y divide-gray-200">
+                    {appointments.map((appointment) => (
+                      <li key={appointment.id} className="px-4 py-4 sm:px-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <p className="text-sm font-medium text-gray-900">{appointment.patientName}</p>
+                            <p className="ml-2 text-sm text-gray-500">{appointment.time}</p>
+                          </div>
+                          <div className="flex items-center">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              appointment.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                              appointment.status === 'completed' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">{appointment.type}</p>
+                          <p className="text-sm text-gray-500">Provider: {appointment.provider}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">有効サブスクリプション</dt>
-                        <dd className="flex items-baseline">
-                          <div className="text-2xl font-semibold text-gray-900">{stats.activeSubscriptions}</div>
-                        </dd>
-                      </dl>
-                    </div>
-                  </div>
+              {/* Recent Patients */}
+              <div className="mt-8">
+                <h2 className="text-lg font-medium text-gray-900">Recent Patients</h2>
+                <div className="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
+                  <ul className="divide-y divide-gray-200">
+                    {patients.map((patient) => (
+                      <li key={patient.id} className="px-4 py-4 sm:px-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <p className="text-sm font-medium text-gray-900">{patient.name}</p>
+                            <p className="ml-2 text-sm text-gray-500">Last Visit: {patient.lastVisit}</p>
+                          </div>
+                          <div className="flex items-center">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              {patient.subscriptionPlan}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">Insurance: {patient.insuranceProvider}</p>
+                          <p className="text-sm text-gray-500">Next Appointment: {patient.nextAppointment}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            </div>
-
-            {/* Today's Appointments */}
-            <div className="mt-8">
-              <h2 className="text-lg font-medium text-gray-900">Today's Appointments</h2>
-              <div className="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
-                <ul className="divide-y divide-gray-200">
-                  {appointments.map((appointment) => (
-                    <li key={appointment.id} className="px-4 py-4 sm:px-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <p className="text-sm font-medium text-gray-900">{appointment.patientName}</p>
-                          <p className="ml-2 text-sm text-gray-500">{appointment.time}</p>
-                        </div>
-                        <div className="flex items-center">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            appointment.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
-                            appointment.status === 'completed' ? 'bg-green-100 text-green-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">{appointment.type}</p>
-                        <p className="text-sm text-gray-500">Provider: {appointment.provider}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Recent Patients */}
-            <div className="mt-8">
-              <h2 className="text-lg font-medium text-gray-900">Recent Patients</h2>
-              <div className="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
-                <ul className="divide-y divide-gray-200">
-                  {patients.map((patient) => (
-                    <li key={patient.id} className="px-4 py-4 sm:px-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <p className="text-sm font-medium text-gray-900">{patient.name}</p>
-                          <p className="ml-2 text-sm text-gray-500">Last Visit: {patient.lastVisit}</p>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            {patient.subscriptionPlan}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">Insurance: {patient.insuranceProvider}</p>
-                        <p className="text-sm text-gray-500">Next Appointment: {patient.nextAppointment}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 } 
