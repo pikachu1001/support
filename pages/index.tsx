@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaClinicMedical, FaUserMd, FaUser } from 'react-icons/fa';
+import { plans } from '../lib/plans';
 
 export default function Home() {
   const router = useRouter();
@@ -51,19 +52,15 @@ export default function Home() {
       <section className="max-w-5xl mx-auto py-12 px-4">
         <h3 className="text-3xl font-bold text-center mb-10 text-gray-800">プランを選択してください</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { plan: 'A', price: '月額3,000円', desc: 'ベーシックサポート', clinic: '2,000円', company: '1,000円', color: 'from-blue-400 to-blue-600' },
-            { plan: 'B', price: '月額4,000円', desc: 'スタンダードサポート', clinic: '2,500円', company: '1,500円', color: 'from-purple-400 to-purple-600' },
-            { plan: 'C', price: '月額5,000円', desc: 'プレミアムサポート', clinic: '3,000円', company: '2,000円', color: 'from-pink-400 to-pink-600' },
-          ].map(({ plan, price, desc, clinic, company, color }) => (
-            <div key={plan} className={`rounded-2xl shadow-xl bg-white/90 border-t-4 border-b-4 border-transparent hover:border-blue-400 transition p-8 flex flex-col items-center relative overflow-hidden`}> 
-              <div className={`absolute inset-0 z-0 bg-gradient-to-br ${color} opacity-10 pointer-events-none`} />
-              <span className="text-2xl font-bold text-blue-600 mb-2">プラン{plan}</span>
-              <span className="text-3xl font-extrabold text-gray-900 mb-2">{price}</span>
-              <span className="text-base text-gray-500 mb-4">{desc}</span>
+          {plans.map((plan) => (
+            <div key={plan.id} className="rounded-2xl shadow-xl bg-white/90 border-t-4 border-b-4 border-transparent hover:border-blue-400 transition p-8 flex flex-col items-center relative overflow-hidden">
+              <div className="absolute inset-0 z-0 bg-gradient-to-br from-blue-400 to-blue-600 opacity-10 pointer-events-none" />
+              <span className="text-2xl font-bold text-blue-600 mb-2">{plan.name}</span>
+              <span className="text-3xl font-extrabold text-gray-900 mb-2">月額{plan.price.toLocaleString()}円</span>
+              <span className="text-base text-gray-500 mb-4">{plan.description}</span>
               <div className="flex flex-col items-center mb-4">
-                <span className="text-sm text-gray-700">クリニック受取: <span className="font-bold text-green-600">{clinic}</span></span>
-                <span className="text-sm text-gray-700">会社受取: <span className="font-bold text-purple-600">{company}</span></span>
+                <span className="text-sm text-gray-700">クリニック受取: <span className="font-bold text-green-600">¥{plan.commission.toLocaleString()}</span></span>
+                <span className="text-sm text-gray-700">会社受取: <span className="font-bold text-purple-600">¥{plan.companyCut.toLocaleString()}</span></span>
               </div>
               <button
                 onClick={() => router.push('/auth/patient/login')}
